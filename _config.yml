@@ -1,0 +1,17 @@
+#
+# Jekyll Configuration File
+#
+
+# Site Information
+name: m4ktub
+author: Cláudio Gil
+tagline: Things need to be written.
+inceptionYear: 2014
+
+# Full url format for posts
+permalink: /blog/:year/:month/:day/:title
+
+# Generation
+encoding: UTF-8
+markdown: kramdown
+highlighter: pygments

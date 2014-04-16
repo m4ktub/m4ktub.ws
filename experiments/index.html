@@ -1,0 +1,14 @@
+---
+layout: blog
+title: Latest Experiments
+description: Posts related with an experiment.
+---
+<div class="posts">
+	<h1 class="content-subhead">Recent Experiments</h1>
+
+	{% for post in site.categories.experiments %}
+		{% assign post = site.posts.first %}
+  		{% assign content = post.content %}
+  		{% include post.html %}
+	{% endfor %}
+</div>

@@ -1,0 +1,29 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.name }}</title>
+  <subtitle>{{ site.tagline }}</subtitle>
+  <link href="http://m4ktub.ws/feeds/atom.xml" rel="self"/>
+  <link href="http://m4ktub.ws/"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>http://m4ktub.ws</id>
+  <author>
+    <name>{{ site.author }}</name>
+    <email>{{ site.email }}</email>
+  </author>
+  {% for post in site.posts limit:10 %}
+  <entry>
+    <title>{{ post.title }}</title>
+    <link href="http://m4ktub.ws{{ post.url }}"/>
+    <id>http://m4ktub.ws{{ post.id }}</id>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <content type="html">{{ post.content | xml_escape }}</content>
+    <author>
+      <name>{{ site.author }}</name>
+      <uri>http://m4ktub.ws/about/</uri>
+    </author>
+  </entry>
+  {% endfor %}
+</feed>

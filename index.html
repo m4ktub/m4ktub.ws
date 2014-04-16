@@ -1,0 +1,14 @@
+---
+layout: blog
+title: Latest Posts
+description: A blog about programming and pseudo-random ideas.
+---
+<div class="posts">
+	<h1 class="content-subhead">Recent Posts</h1>
+
+	{% for post in site.posts %}
+		{% assign post = site.posts.first %}
+  		{% assign content = post.content %}
+  		{% include post.html %}
+	{% endfor %}
+</div>

@@ -1,0 +1,74 @@
+/*
+ * Main CSS with new styles and be style override.
+ */
+
+.sidebar a { 
+	color: #fff; 
+}
+
+.sidebar a:hover {
+	text-decoration: none;
+}
+
+@media (min-width: 48em) {
+    .header {
+        margin: 20% 2em 0;
+        text-align: right;
+    }
+}
+
+.post-title a {
+	color: #222;
+}
+
+.post-title a:hover {
+	text-decoration: none;
+}
+
+.footer .copyright {
+	color: #ccc;
+	font-size: 80%;
+}
+
+/* post categories */
+.post-category-experiments { background: #5aba59; }
+.post-category-news        { background: #4d85d1; }
+.post-category-programming { background: #8156a7; }
+.post-category-ideas       { background: #df2d4f; }
+
+/* experiments */
+
+.context {
+	margin: 0.67em 0px;
+}
+
+.context h1 {
+	text-transform: uppercase;
+	font-size: 1em;
+	margin: 0em;
+}
+
+.context p {
+	margin: 0em;
+	color: rgb(176, 202, 219);
+}
+
+.context p a {
+	color: rgb(176, 202, 219);
+}
+
+.tags h4 {
+	margin: 1.33em 0em 0em 0em;
+}
+
+.tags ul {
+	padding: 0px;
+	margin: 0.5em 0px;
+}
+
+.tags a {
+	background: none;
+	border: 2px solid rgb(176, 202, 219);
+	padding: 0.2em 1em;
+	margin: 0.2em 0em;
+}

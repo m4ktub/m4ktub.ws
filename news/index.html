@@ -1,0 +1,14 @@
+---
+layout: blog
+title: Latest News
+description: Posts related with site or world news.
+---
+<div class="posts">
+	<h1 class="content-subhead">Recent News</h1>
+
+	{% for post in site.categories.news %}
+		{% assign post = site.posts.first %}
+  		{% assign content = post.content %}
+  		{% include post.html %}
+	{% endfor %}
+</div>
