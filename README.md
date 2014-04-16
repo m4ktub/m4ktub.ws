@@ -7,9 +7,9 @@ Licensing
 ---------
 
 All the posts, in the \_drafts and \_posts directories, and all the produced
-images, in the \_images, directory, have the default licensing and are &copy;
+images, in the images directory, have the default licensing and are &copy;
 Cláudio Gil.
 
-All the other content, unless stated otherwise, has the MIT License or the
-license described in the file's preamble or the LICENSE.\* file in the same
-directory.
+All the other content has the MIT License, unless stated otherwise in the 
+file's preamble. The full license, when available, is in the LICENSE.\* file 
+located in the same directory.
