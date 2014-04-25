@@ -4,6 +4,7 @@
 
 # Site Information
 name: m4ktub
+domain: m4ktub.ws
 author: Cláudio Gil
 tagline: Things need to be written.
 inceptionYear: 2014
@@ -15,3 +16,17 @@ permalink: /blog/:year/:month/:day/:title
 encoding: UTF-8
 markdown: kramdown
 highlighter: pygments
+
+# Github
+github:
+    name: m4ktub
+    project: m4ktub.ws
+    branch: master
+
+# Facebook
+facebook:
+    name: claudio.f.gil
+
+# Google Analytics
+ga:
+    id: UA-50377751-1

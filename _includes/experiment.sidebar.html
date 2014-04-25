@@ -13,7 +13,8 @@
   <nav class="nav">
     <ul class="nav-list">
       <li class="nav-item">
-        <a class="pure-button" href="http://github.com/m4ktub/m4ktub.ws{{ page.url }}">Github</a>
+        {% capture x %}{{ page.url | split: "/" | last }}{% endcapture %}
+        <a class="pure-button" href="http://github.com/{{ site.github.name }}/{{ site.github.project}}/tree/{{ site.github.branch }}{{ page.url | replace: x, "" }}">Github</a>
       </li>
     </ul>
   </nav>
