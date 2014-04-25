@@ -1,0 +1,29 @@
+<div class="header">
+  <header class="context">
+    <h1><a href="/">{{ site.name }}</a></h1>
+    <p><a href="/experiments">Experiments</a></p>
+  </header>
+  <hgroup>
+    <h1 class="brand-title">{{ page.title }}</h1>
+    <h2 class="brand-tagline">Version {{ page.version }}</h2>
+  </hgroup>
+  {% if page.date %}
+    <p class="brand-tagline">{{ page.date | date: "%F" }}</p>
+  {% endif %}
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a class="pure-button" href="http://github.com/m4ktub/m4ktub.ws{{ page.url }}">Github</a>
+      </li>
+    </ul>
+  </nav>
+
+  <nav class="tags">
+    <h4>Tags</h4>
+    <ul class="nav-list">
+      {% for tag in page.tags %}
+        <li class="nav-item"><a class="pure-button" href="">{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+</div>

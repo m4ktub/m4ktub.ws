@@ -1,0 +1,7 @@
+{% if page.date %}
+  <p class="copyright">Copyright {{ site.author }}
+    &copy; {{ page.date | date: "%Y" }}</p>
+{% else %}
+  <p class="copyright">Copyright {{ site.author }}
+    &copy; {{ site.time | date: "%Y" }}</p>
+{% endif %}
