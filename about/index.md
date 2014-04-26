@@ -8,15 +8,8 @@ description: About the blog and experiments
 ![m4ktub](/images/avatar.jpg){:width="100px"}
 {:.left}
 
-<div>
-<ul>
 {% for link in site.links %}
-    <li>
-        <a href="{{ link.url }}">{{ link.name }}</a>
-    </li>
-{% endfor %}
-</ul>
-</div>
+  * [{{ link.name }}]({{ link.url }}){% endfor %}
 {:.right}
 
 I'm a software engineer living in Portugal. My brother initiated me in the art
