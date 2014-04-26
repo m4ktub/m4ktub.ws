@@ -6,7 +6,7 @@
 name: m4ktub
 domain: m4ktub.ws
 author: Cláudio Gil
-tagline: Things need to be written.
+tagline: Because some things need to be written.
 inceptionYear: 2014
 
 # Full url format for posts
@@ -30,3 +30,18 @@ facebook:
 # Google Analytics
 ga:
     id: UA-50377751-1
+
+# Social Links
+links:
+    - name: Facebook
+      url: http://www.facebook.com/claudio.f.gil
+    - name: LinkedIn
+      url: https://www.linkedin.com/in/claudiogil
+    - name: Google+
+      url: https://plus.google.com/114986524048776058715
+    - name: Wuala
+      url: https://www.wuala.com/m4ktub
+    - name: Last.fm
+      url: http://last.fm/user/m4ktub
+    - name: GitHub
+      url: https://github.com/m4ktub

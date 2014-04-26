@@ -30,6 +30,16 @@
 	font-size: 80%;
 }
 
+.left {
+    float: left;
+    margin: 0.4em;
+}
+
+.right {
+    float: right;
+    margin: 0.4em;
+}
+
 /* post categories */
 .post-category-experiments { background: #5aba59; }
 .post-category-news        { background: #4d85d1; }
