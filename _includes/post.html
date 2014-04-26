@@ -1,13 +1,9 @@
-{% if page.description %}
-  <h1 class="content-subhead">{{ page.description }}</h1>
-{% endif %}
-
 <section class="post">
   <header class="post-header">
 	<h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
 	<p class="post-meta">
 	  On {{ post.date | date_to_string }}
-      {% if page.categories.size > 0 %}
+      {% if post.categories.size > 0 %}
         under
 	    {% for category in post.categories %}
 		  <a class="post-category post-category-{{ category }}" href="/{{ category }}">{{ category }}</a>
