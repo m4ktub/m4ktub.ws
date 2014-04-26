@@ -1,9 +1,8 @@
 ---
 layout: blog
 title: Latest Experiments
-description: Posts related with an experiment.
+description: Recent Experiments
 ---
-<h1 class="content-subhead">Recent Experiments</h1>
 {% for post in site.categories.experiments %}
   {% assign content = post.content %}
   {% include post.html %}
