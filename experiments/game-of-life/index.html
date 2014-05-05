@@ -3,6 +3,97 @@ layout: experiment
 title: Game of Life
 tags: [cellular, automaton, canvas, game]
 version: 0.1
-date: 
+date: 2014-05-06 00:03:24
 ---
-The game of life experiment.
+
+<!-- style -->
+
+<style>
+ .main {
+   text-align: center;
+ }
+
+ .information {
+   margin: 4px 0px;
+ }
+
+ canvas {
+   border: 1px solid darkgray;
+   box-shadow: 0px 0px 3px 0px darkgray;
+ }
+
+ #pattern {
+   display: none;
+ }
+</style>
+
+<!-- structure -->
+
+<div class="main">
+  <div class="frame">
+    <canvas id="gol" width="400px" height="300px"></canvas>
+    <div id="pattern" title="Glider Gun">
+      |                                      |
+      |                         x            |
+      |                       x x            |
+      |             xx      xx            xx |
+      |            x   x    xx            xx |
+      | xx        x     x   xx               |
+      | xx        x   x xx    x x            |
+      |           x     x       x            |
+      |            x   x                     |
+      |             xx                       |
+      |                                      |
+    </div>
+
+  </div>
+  <div class="information">
+    Steps: <span id="step">0</span>
+    Population: <span id="population">0</span>
+  </div>
+  <div class="controls">
+    <button id="bRun">Run</button>
+    <button id="bPause" disabled="disabled">Pause</button>
+    <button id="bStep">Step</button>
+    <button id="bReset">Reset</button>
+  </div>
+</div>
+
+<!-- scripting -->
+
+<script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.2.0/prototype.js"></script>
+<script src="js/ext/AnimationFrame.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/game-loop.js"></script>
+<script src="js/game-of-life.js"></script>
+
+<script>
+ // provide consistent animation frames
+ AnimationFrame.shim();
+
+ // initialize game
+ var loop = new GameLoop({
+   controls: {
+     start: 'bRun',
+     stop: 'bPause',
+     step: 'bStep',
+     reset: 'bReset'
+   },
+
+   game: new GameOfLife({
+     canvas: 'gol',
+     pattern: $('pattern').innerHTML
+   }),
+
+   afterStep: function(loop) {
+     $('step').innerHTML = loop.state.step;
+     $('population').innerHTML = loop.game.state.population;
+   },
+
+   afterReset: function(loop) {
+     $('step').innerHTML = loop.state.step;
+     $('population').innerHTML = loop.game.state.population;
+   }
+
+ });
+</script>
