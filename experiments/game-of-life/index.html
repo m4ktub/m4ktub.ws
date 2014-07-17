@@ -2,17 +2,13 @@
 layout: experiment
 title: Game of Life
 tags: [cellular, automaton, canvas, game]
-version: 0.1
-date: 2014-05-06 00:03:24
+version: 0.2
+date: 2014-07-17 23:22:04
 ---
 
 <!-- style -->
 
 <style>
- .main {
-   text-align: center;
- }
-
  .information {
    margin: 4px 0px;
  }
@@ -25,38 +21,91 @@ date: 2014-05-06 00:03:24
  #pattern {
    display: none;
  }
+
+.game canvas {
+   float: left;
+}
+
+.game .information {
+   float: left;
+   margin-left: 2em;
+}
+
+.information th {
+   text-align: right;
+   font-weight: normal;
+   padding-right: 10px;
+}
+
+.controls {
+   clear: both;
+   padding-top: 1em;
+}
 </style>
 
 <!-- structure -->
 
-<div class="main">
-  <div class="frame">
-    <canvas id="gol" width="400px" height="300px"></canvas>
-    <div id="pattern" title="Glider Gun">
-      |                                      |
-      |                         x            |
-      |                       x x            |
-      |             xx      xx            xx |
-      |            x   x    xx            xx |
-      | xx        x     x   xx               |
-      | xx        x   x xx    x x            |
-      |           x     x       x            |
-      |            x   x                     |
-      |             xx                       |
-      |                                      |
-    </div>
+<div class="game">
+  <div id="pattern" title="Glider Gun">
+    |                                      |
+    |                         x            |
+    |                       x x            |
+    |             xx      xx            xx |
+    |            x   x    xx            xx |
+    | xx        x     x   xx               |
+    | xx        x   x xx    x x            |
+    |           x     x       x            |
+    |            x   x                     |
+    |             xx                       |
+    |                                      |
+  </div>
 
+  <div class="instructions">
+    <p>You can scrool to zoom and drag to move the pattern around.</p>
   </div>
-  <div class="information">
-    Steps: <span id="step">0</span>
-    Population: <span id="population">0</span>
+
+  <div class="game">    
+    <canvas id="gol" width="400px" height="300px"></canvas>
+    
+    <table class="information">
+      <tr>
+        <th scope="row">Steps:</th>
+        <td><span id="step">0</span></td>
+      </tr>
+      <tr>
+        <th>Population:</th>
+        <td><span id="population">0</span></td>
+      </tr>
+    </table>
   </div>
-  <div class="controls">
+
+  <div class="controls">    
     <button id="bRun">Run</button>
     <button id="bPause" disabled="disabled">Pause</button>
     <button id="bStep">Step</button>
     <button id="bReset">Reset</button>
   </div>
+</div>
+
+<div class="changes">
+  <p>Changes</>
+  <ul>
+    <li>
+      <strong>0.2</strong> - <span class="date">2014-07-09</span>
+      <ul>
+        <li>Added zoom and pan to the canvas.</li>
+        <li>Separated interactivity logic from automaton evolution.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>0.1</strong> - <span class="date">2014-05-06</span>
+      <ul>
+        <li>Initial version with a non-interactive canvas.</li>
+        <li>Game of life implemented with a toroidal area with the same
+          size of the canvas.</li>
+      </ul>
+    </li>
+  </ul>
 </div>
 
 <!-- scripting -->
@@ -65,13 +114,14 @@ date: 2014-05-06 00:03:24
 <script src="js/ext/AnimationFrame.min.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/game-loop.js"></script>
+<script src="js/automaton.js"></script>
 <script src="js/game-of-life.js"></script>
 
 <script>
  // provide consistent animation frames
  AnimationFrame.shim();
 
- // initialize game
+ // create game structure
  var loop = new GameLoop({
    controls: {
      start: 'bRun',
@@ -80,20 +130,27 @@ date: 2014-05-06 00:03:24
      reset: 'bReset'
    },
 
-   game: new GameOfLife({
+   game: new Automaton({
      canvas: 'gol',
-     pattern: $('pattern').innerHTML
+     automaton: new GameOfLife({
+       height: $('gol').height,
+       width: $('gol').width,
+       pattern: $('pattern').innerHTML
+     })
    }),
 
    afterStep: function(loop) {
-     $('step').innerHTML = loop.state.step;
-     $('population').innerHTML = loop.game.state.population;
+     $('step').innerHTML = loop.game.automaton.state.generation;
+     $('population').innerHTML = loop.game.automaton.state.population;
    },
 
    afterReset: function(loop) {
-     $('step').innerHTML = loop.state.step;
-     $('population').innerHTML = loop.game.state.population;
+     $('step').innerHTML = loop.game.automaton.state.generation;
+     $('population').innerHTML = loop.game.automaton.state.population;
    }
 
  });
+
+ // start things up
+ loop.reset();
 </script>

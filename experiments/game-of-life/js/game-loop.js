@@ -161,6 +161,4 @@ function GameLoop(options) {
             $(control).observe('click', this[name]);
         }
     }
-
-    updateControls();
 }

@@ -5,47 +5,34 @@
 //
 
 function GameOfLife(options) {
-    // cache this reference
-    var self = this;
 
     //
-    // associated canvas
+    // config
     //
 
-    var canvas = $(options.canvas || 'gol');
-
-    //
-    // initialize configuration
-    //
-    var config = this.config = {
-        canvas: canvas,
+    var config = {
+        height: options.height,
+        width: options.width,
         pattern: options.pattern
     };
-
+    
     //
     // state
     //
-    
+
     var state = this.state = {
         population: 0,
-
-        width: canvas.width,
-        height: canvas.height,
-
-        scale: 1.0,
-        center: {
-            x: 0,
-            y: 0
-        }
+        generation: 0
     };
 
-    var ctx = canvas.getContext("2d");
-    ctx.scale(state.scale, state.scale);
-    
+    //
+    // current and next generation cells
+    //
+
     function createCellsArray() {
-        var rows = new Array(state.height);
+        var rows = new Array(config.height);
         for (var r = 0; r < rows.length; r++) {
-            var row = new Array(state.width);
+            var row = new Array(config.width);
             
             for (var c = 0; c < row.length; c++) {
                 row[c] = 0;
@@ -63,23 +50,26 @@ function GameOfLife(options) {
     };
 
     //
-    // game logic
-    //
-    
+    // cell access and modification
+    // 
+
     function wrap(v, max) {
-        if (v < 0) v += max;
-        if (v >= max) v -= max;
+        while (v < 0) v += max;
+        while (v >= max) v -= max;
         return v;
     }
 
     function getCell(x, y) {
-        return cells.cur[wrap(y, state.height)][wrap(x, state.width)];
+        return cells.cur[wrap(y, config.height)][wrap(x, config.width)];
     }
 
-    function putCell(x, y, alive, current) {
-        var target = current ? cells.cur : cells.nxt;
-        target[wrap(y, state.height)][wrap(x, state.width)] = alive ? 1 : 0;
+    function putCell(target, x, y, alive) {
+        target[wrap(y, config.height)][wrap(x, config.width)] = alive ? 1 : 0;
     }
+
+    //
+    // evolution
+    //
 
     function neighborhood(x, y) {
         return 0 +
@@ -94,62 +84,58 @@ function GameOfLife(options) {
     }
 
     function evolve() {
-        state.population = 0;
+        // compute next
+        var population = 0;
 
-        for (var y = 0; y < state.height; y++) {
-            for (var x = 0; x < state.width; x++) {
+        for (var y = 0; y < config.height; y++) {
+            for (var x = 0; x < config.width; x++) {
                 var cell = getCell(x, y);
                 var allfield = cell + neighborhood(x, y);
                 
                 switch (allfield) {
                 case 3:
-                    putCell(x, y, true);
-                    state.population++;
+                    putCell(cells.nxt, x, y, true);
+                    population++;
                     break;
                 case 4:
-                    putCell(x, y, cell);
-                    state.population += cell;
+                    putCell(cells.nxt, x, y, cell);
+                    population += cell ? 1 : 0;
                     break;
                 default:
-                    putCell(x, y, false);
+                    putCell(cells.nxt, x, y, false);
                     break;
                 }
             }
         }
+        
+        // update state
+        state.population = population;
+        state.generation += 1;
 
+        // swap cells
         var computed = cells.nxt;
         cells.nxt = cells.cur;
         cells.cur = computed;
     }
-    
+
     //
-    // drawing
+    // public api
     //
 
-    function clear() {
-        ctx.clearRect(0, 0, state.width, state.height);        
-    }
-    
-    function drawCell(x, y) {
-        ctx.fillRect(x, y, 1, 1);
-    }
+    this.view = {
+        // the view coords
+        top: 0,
+        left: 0,
+        bottom: config.height - 1,
+        right: config.width - 1,
 
-    function draw() {
-        clear();
-        for (var y = 0; y < state.height; y++) {
-            for (var x = 0; x < state.width; x++) {
-                if (getCell(x, y)) {
-                    drawCell(x, y);
-                }
-            }
+        // the colors
+        style: {
+            background: "#fff"
         }
-    }
+    };
 
-    //
-    // public functions
-    //
-
-    this.setPattern = function(pattern) {
+    this.load = function(pattern) {
         if (!pattern) {
             return;
         }
@@ -166,46 +152,58 @@ function GameOfLife(options) {
             return l.length;
         });
 
-        // top left corner
-        var top = Math.floor(state.height / 2 - lines.length / 2);
-        var left = Math.floor(state.width / 2 - maxCols / 2);
+        // top left corner of pattern
+        var top = Math.floor(config.height / 2 - lines.length / 2);
+        var left = Math.floor(config.width / 2 - maxCols / 2);
 
         // clear cells
-        for (var y = 0; y < state.height; y++) {
-            for (var x = 0; x < state.width; x++) {
-                putCell(x, y, false, true);
+        for (var y = 0; y < config.height; y++) {
+            for (var x = 0; x < config.width; x++) {
+                putCell(cells.cur, x, y, false);
             }
         }
 
         // put pattern
         state.population = 0;
-
         for (var dy = 0; dy < lines.length; dy++) {
             var line = lines[dy];
             
             for (var dx = 0; dx < line.length; dx++) {
                 if (line.charAt(dx) != " ") {
-                    putCell(left + dx, top + dy, true, true);
                     state.population++;
+                    putCell(cells.cur, left + dx, top + dy, true);
                 }
             }
         }
-    }
+    };
 
-    this.step = function(loop) {
+    this.reset = function() {
+        state.generation = 0;
+        this.load(config.pattern);
+    };
+
+    this.step = function() {
         evolve();
-        draw();
     };
+    
+    this.getColor = function(x, y, width, height) {
+        var count = 0;
 
-    this.reset = function(loop) {
-        self.setPattern(config.pattern || "");
-        draw();
+        for (var h = 0; h < height; h++) {
+            for (var w = 0; w < width; w++) {
+                if (getCell(x + h, y + h)) {
+                    count++;
+                }
+            }
+        }
+
+        var area = width * height;
+        var color = 255 - Math.round(255 * count / area);
+        if (count > 0) {
+            return "rgb(" + color + "," + color + "," + color + ")";
+        }
+        else {
+            return false;
+        }
     };
-
-    //
-    // initialization
-    //
-
-    this.reset();
-
 }
