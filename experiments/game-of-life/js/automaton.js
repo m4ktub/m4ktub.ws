@@ -4,7 +4,7 @@
 // Copyright (c) 2014 Cláudio Gil
 //
 
-function Automaton(options) {
+function CellAutomaton(options) {
 
     // cache this reference
     var self = this;
@@ -13,14 +13,14 @@ function Automaton(options) {
     // associated canvas and context
     //
 
-    var canvas = $(options.canvas || 'gol');
+    var canvas = $(options.canvas);
     var ctx = canvas.getContext("2d");
 
     //
     // associated automaton
     //
 
-    var automaton = this.automaton = options.automaton;
+    var algorithm = this.algorithm = options.algorithm;
 
     //
     // initialize configuration
@@ -28,8 +28,9 @@ function Automaton(options) {
 
     var config = this.config = {
         canvas: canvas,
-        automaton: automaton,
+        algorithm: algorithm,
 
+        scale: options.scale,
         zoom: {
             inc: 1.1,
             dec: 0.9,
@@ -43,9 +44,6 @@ function Automaton(options) {
     //
     
     var state = this.state = {
-        width: canvas.width,
-        height: canvas.height,
-        
         scale: 1.0,
         top: 0.0,
         left: 0.0,
@@ -69,8 +67,8 @@ function Automaton(options) {
     //
 
     function clear() {
-        ctx.fillStyle = automaton.view.style.background || "#FFFFFF";
-        ctx.clearRect(0, 0, state.width, state.height);        
+        ctx.fillStyle = algorithm.style.background || "#FFFFFF";
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     
     function drawCell(x, y, width, height, color) {
@@ -96,7 +94,7 @@ function Automaton(options) {
 
         // get color fox each pixel
         for (var pyf = py0, cyf = cy0; 
-             pyf < state.height; 
+             pyf < canvas.height; 
              pyf += Math.max(1, ppc), cyf += Math.max(1, cpp)) 
         {
             var pyi = Math.floor(pyf);
@@ -105,7 +103,7 @@ function Automaton(options) {
             var pydelta = Math.max(1, Math.floor(pyf + ppc) - pyi);
 
             for (var pxf = px0, cxf = cx0; 
-                 pxf < state.width; 
+                 pxf < canvas.width; 
                  pxf += Math.max(1, ppc), cxf += Math.max(1, cpp)) 
             {
                 var pxi = Math.floor(pxf);
@@ -113,11 +111,11 @@ function Automaton(options) {
                 var pxdelta = Math.max(1, Math.floor(pxf + ppc) - pxi);
                 var cxdelta = Math.max(1, Math.floor(cxf + cpp) - cxi);
 
-                // The automaton is asked to generate a color representing
+                // The algorithm is asked to generate a color representing
                 // the combination of all cells in a square cxdelta x cydelta 
                 // starting at (cxi, cyi). If scale >= 1 then delta = 1 and
                 // this obtains the color for a single cell.
-                var color = automaton.getColor(cxi, cyi, cxdelta, cydelta);
+                var color = algorithm.getColor(cxi, cyi, cxdelta, cydelta);
                 if (color) {
                     drawCell(pxi, pyi, pxdelta, pydelta, color);
                 }
@@ -182,11 +180,20 @@ function Automaton(options) {
         draw();
     });
 
-    $(canvas).observe('mouseout', function(event) {
-        drag.active = false;
-        drag.x = undefined;
-        drag.y = undefined;
-    });
+    function applyScale(newscale, x, y) {
+        // new and old cpp
+        var oldcpp = 1 / state.scale;
+        var newcpp = 1 / newscale;
+
+        // calculate cell offset
+        var cdx = x * newcpp - x * oldcpp;
+        var cdy = y * newcpp - y * oldcpp;
+
+        // apply scale and offsets
+        state.scale = newscale;
+        state.left -= cdx;
+        state.top -= cdy;
+    }
 
     $(canvas).observe('mousewheel', function(event) {
         // stop page from scrolling
@@ -202,22 +209,13 @@ function Automaton(options) {
                                   config.zoom.max, 
                                   state.scale * zoomfactor);
 
-        var oldcpp = 1 / state.scale;
-        var newcpp = 1 / newscale;
-
         // find relative px and py
         var offset = Fn.getOffset(canvas);
         var px = mouse.x - offset.left;
         var py = mouse.y - offset.top;
 
-        // calculate cell offset
-        var cdx = px * newcpp - px * oldcpp;
-        var cdy = py * newcpp - py * oldcpp;
-
-        // apply scale and offsets
-        state.scale = newscale;
-        state.left -= cdx;
-        state.top -= cdy;
+        // apply new scale using mouse position as the center
+        applyScale(newscale, px, py);
 
         // redraw
         draw();
@@ -228,16 +226,28 @@ function Automaton(options) {
     //
 
     this.step = function(loop) {
-        automaton.step();
+        algorithm.step();
         draw();
     };
 
     this.reset = function(loop) {
+        // set the initial top-left position based on the algorithm center
+        var center = algorithm.center || { x: 0, y: 0 };
+        
+        state.top = center.y - Math.floor(canvas.height / 2);
+        state.left = center.x - Math.floor(canvas.width / 2);
         state.scale = 1.0;
-        state.top = automaton.view.top;
-        state.left = automaton.view.left;
 
-        automaton.reset();
+        // apply the initial scale which might move the top-left
+        applyScale(
+            config.scale, 
+            Math.floor(canvas.width / 2), 
+            Math.floor(canvas.height / 2));
+
+        // reset algorithm
+        algorithm.reset();
+
+        // and redraw
         draw();
     };
 }

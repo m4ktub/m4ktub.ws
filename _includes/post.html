@@ -13,6 +13,15 @@
   </header>
 
   <div class="post-description">
-	{{ content }}
+    {% if excerpt %}
+      {% capture continueLink %}
+      <a href="{{ post.url }}">Continue reading...</a>
+
+      {% endcapture %}
+      {{ excerpt | replace: '</p>', continueLink }}
+    {% else %}
+      {{ content }}
+      {% include disqus.html %}
+    {% endif %}
   </div>
 </section>

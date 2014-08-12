@@ -18,7 +18,7 @@
     <link href="http://{{ site.domain }}{{ post.url }}"/>
     <id>http://{{ site.domain }}{{ post.id }}</id>
     <updated>{{ post.date | date_to_xmlschema }}</updated>
-    <content type="html">{{ post.content | xml_escape }}</content>
+    <content type="html">{{ post.excerpt | xml_escape }}</content>
     <author>
       <name>{{ site.author }}</name>
       <uri>http://{{ site.domain }}/about/</uri>

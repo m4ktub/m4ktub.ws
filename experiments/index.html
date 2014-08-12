@@ -5,6 +5,6 @@ description: Posts related with experiments in programming, technolories or idea
 ---
 <h1 class="content-subhead">Latest Experiments</h1>
 {% for post in site.categories.experiments %}
-  {% assign content = post.content %}
+  {% assign excerpt = post.excerpt %}
   {% include post.html %}
 {% endfor %}

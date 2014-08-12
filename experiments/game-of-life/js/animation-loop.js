@@ -4,7 +4,7 @@
 // Copyright (c) 2014 Cláudio Gil
 //
 
-function GameLoop(options) {
+function AnimationLoop(options) {
     // cache this reference
     var self = this;
 
@@ -25,17 +25,18 @@ function GameLoop(options) {
             reset: undefined
         },
         
+        step: options.step || game.step || Fn.empty,
+        reset: options.reset || game.reset || Fn.empty,
+
         beforeStart: options.beforeStart || Fn.empty,
         beforeStep: options.beforeStep || Fn.empty,
-        step: options.step || game.step || Fn.empty,
         afterStep: options.afterStep || Fn.empty,
         afterStop: options.afterStop || Fn.empty,
-        reset: options.reset || game.reset || Fn.empty,
         afterReset: options.afterReset || Fn.empty
     };
 
     for (var name in config.controls) {
-        var control = (options.controls || {})[name];
+        var control = Fn.oget(options.controls, name);
         if (control) {
             config.controls[name] = $(control);
         }
@@ -47,7 +48,7 @@ function GameLoop(options) {
 
     var state = this.state = {
         running: false,
-        step: 0,
+        frame: 0,
 
         animation: {
             start: undefined,
@@ -107,21 +108,20 @@ function GameLoop(options) {
         var animation = state.animation;
         cancelAnimationFrame(animation.requestId);           
         animation.requestId = undefined;
+        animation.start = undefined;
         state.running = false;
         config.afterStop(self);
     }
 
     function step() {
         config.beforeStep(self);
-        state.step += 1;
+        state.frame += 1;
         config.step(self);
         config.afterStep(self);
     }
     
     function reset() {
-        state.step = 0;
-        state.animation.start = undefined;
-
+        state.frame = 0;
         config.reset(self);
         config.afterReset(self);
     }

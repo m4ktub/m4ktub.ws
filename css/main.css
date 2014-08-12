@@ -40,6 +40,10 @@
     margin: 0.4em;
 }
 
+.center {
+    text-align: center;
+}
+
 /* post categories */
 .post-category-experiments { background: #5aba59; }
 .post-category-news        { background: #4d85d1; }
@@ -81,4 +85,10 @@
 	border: 2px solid rgb(176, 202, 219);
 	padding: 0.2em 1em;
 	margin: 0.2em 0em;
+}
+
+/* code blocks */
+
+.highlight pre {
+    line-height: 1.2em;
 }

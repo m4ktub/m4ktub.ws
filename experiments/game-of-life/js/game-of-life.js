@@ -11,9 +11,7 @@ function GameOfLife(options) {
     //
 
     var config = {
-        height: options.height,
-        width: options.width,
-        pattern: options.pattern
+        pattern: options.pattern,
     };
     
     //
@@ -26,45 +24,51 @@ function GameOfLife(options) {
     };
 
     //
-    // current and next generation cells
+    // current cells
     //
 
-    function createCellsArray() {
-        var rows = new Array(config.height);
-        for (var r = 0; r < rows.length; r++) {
-            var row = new Array(config.width);
-            
-            for (var c = 0; c < row.length; c++) {
-                row[c] = 0;
-            }
-            
-            rows[r] = row;
-        };
-
-        return rows;
-    }
-
-    var cells = {
-        cur: createCellsArray(),
-        nxt: createCellsArray()
-    };
+    var cells = { };
 
     //
     // cell access and modification
     // 
 
-    function wrap(v, max) {
-        while (v < 0) v += max;
-        while (v >= max) v -= max;
-        return v;
+    function getCellKey(x, y) {
+        return "x" + x + "y" + y;
+    }
+
+    function getCellKeyCoords(key) {
+        var yPos = key.indexOf('y');
+        return { 
+            x: parseInt(key.substring(1, yPos)), 
+            y: parseInt(key.substring(yPos + 1))
+        };
     }
 
     function getCell(x, y) {
-        return cells.cur[wrap(y, config.height)][wrap(x, config.width)];
+        return cells[getCellKey(x, y)] || 0;
     }
 
     function putCell(target, x, y, alive) {
-        target[wrap(y, config.height)][wrap(x, config.width)] = alive ? 1 : 0;
+        if (!alive) {
+            return;
+        }
+
+        target[getCellKey(x, y)] = 1;
+
+        function fillNeighbor(x, y) {
+            var key = getCellKey(x, y);
+            target[key] = target[key] || 0;
+        }
+
+        fillNeighbor(x - 1, y - 1);
+        fillNeighbor(x    , y - 1);
+        fillNeighbor(x + 1, y - 1);
+        fillNeighbor(x - 1, y    );
+        fillNeighbor(x + 1, y    );
+        fillNeighbor(x - 1, y + 1);
+        fillNeighbor(x    , y + 1);
+        fillNeighbor(x + 1, y + 1);
     }
 
     //
@@ -84,27 +88,31 @@ function GameOfLife(options) {
     }
 
     function evolve() {
-        // compute next
+        // clear next
         var population = 0;
+        var next = { };
 
-        for (var y = 0; y < config.height; y++) {
-            for (var x = 0; x < config.width; x++) {
-                var cell = getCell(x, y);
-                var allfield = cell + neighborhood(x, y);
-                
-                switch (allfield) {
-                case 3:
-                    putCell(cells.nxt, x, y, true);
-                    population++;
-                    break;
-                case 4:
-                    putCell(cells.nxt, x, y, cell);
-                    population += cell ? 1 : 0;
-                    break;
-                default:
-                    putCell(cells.nxt, x, y, false);
-                    break;
-                }
+        // compute next
+        for (var pos in cells) {
+            var coords = getCellKeyCoords(pos);
+            var x = coords.x;
+            var y = coords.y;
+
+            var cell = getCell(x, y);
+            var allfield = cell + neighborhood(x, y);
+            
+            switch (allfield) {
+            case 3:
+                putCell(next, x, y, true);
+                population++;
+                break;
+            case 4:
+                putCell(next, x, y, cell);
+                population += cell ? 1 : 0;
+                break;
+            default:
+                putCell(next, x, y, false);
+                break;
             }
         }
         
@@ -112,33 +120,26 @@ function GameOfLife(options) {
         state.population = population;
         state.generation += 1;
 
-        // swap cells
-        var computed = cells.nxt;
-        cells.nxt = cells.cur;
-        cells.cur = computed;
+        // update cells
+        cells = next;
     }
 
     //
     // public api
     //
 
-    this.view = {
-        // the view coords
-        top: 0,
-        left: 0,
-        bottom: config.height - 1,
-        right: config.width - 1,
+    this.center = {
+        x: 0,
+        y: 0 
+    };
 
-        // the colors
-        style: {
-            background: "#fff"
-        }
+    this.style = {
+        background: "#fff"
     };
 
     this.load = function(pattern) {
-        if (!pattern) {
-            return;
-        }
+        // save pattern
+        config.pattern = pattern;
 
         // process lines
         var lines = $A(pattern.split(/\r?\n|\r/))
@@ -153,15 +154,11 @@ function GameOfLife(options) {
         });
 
         // top left corner of pattern
-        var top = Math.floor(config.height / 2 - lines.length / 2);
-        var left = Math.floor(config.width / 2 - maxCols / 2);
+        var top = -Math.floor(lines.length / 2);
+        var left = -Math.floor(maxCols / 2);
 
         // clear cells
-        for (var y = 0; y < config.height; y++) {
-            for (var x = 0; x < config.width; x++) {
-                putCell(cells.cur, x, y, false);
-            }
-        }
+        cells = {};
 
         // put pattern
         state.population = 0;
@@ -171,7 +168,7 @@ function GameOfLife(options) {
             for (var dx = 0; dx < line.length; dx++) {
                 if (line.charAt(dx) != " ") {
                     state.population++;
-                    putCell(cells.cur, left + dx, top + dy, true);
+                    putCell(cells, left + dx, top + dy, true);
                 }
             }
         }
