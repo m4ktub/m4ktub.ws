@@ -2,9 +2,13 @@
   <header class="post-header">
 	<h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
 	<p class="post-meta">
-	  On {{ post.date | date_to_string }}
+      {% if post.date %}
+	    On {{ post.date | date_to_string }}
+      {% else %}
+	    On {{ site.time | date_to_string }}
+      {% endif %}
       {% if post.categories.size > 0 %}
-        under
+        about
 	    {% for category in post.categories %}
 		  <a class="post-category post-category-{{ category }}" href="/{{ category }}">{{ category }}</a>
 	    {% endfor %}
@@ -21,7 +25,9 @@
       {{ excerpt | replace: '</p>', continueLink }}
     {% else %}
       {{ content }}
-      {% include disqus.html %}
+      {% if include.comments != "false" %}
+        {% include disqus.html %}
+      {% endif %}
     {% endif %}
   </div>
 </section>
