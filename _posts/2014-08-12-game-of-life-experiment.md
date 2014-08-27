@@ -978,7 +978,7 @@ var loop = new AnimationLoop({
 {% endhighlight %}
 
 With all this setup we just need to put the key in the engine and start
-it. Therefore the last element it the initialization of the loop, automaton, and algorithm by calling the public `reset`.
+it. Therefore the last element is the initialization of the loop, automaton, and algorithm by calling the public `reset`.
 
 {% highlight javascript %}
 loop.reset();
