@@ -195,12 +195,12 @@ function CellAutomaton(options) {
         state.top -= cdy;
     }
 
-    $(canvas).observe('mousewheel', function(event) {
+    function handleMouse(event) {
         // stop page from scrolling
         Event.stop(event);
 
         // choose factor according to wheel direction
-        var zoomfactor = event.wheelDelta > 0 
+        var zoomfactor = event.deltaY > 0 
             ? config.zoom.inc
             : config.zoom.dec;
 
@@ -219,7 +219,10 @@ function CellAutomaton(options) {
 
         // redraw
         draw();
-    });
+    }
+
+    $(canvas).observe('mousewheel', handleMouse);
+    $(canvas).observe('wheel', handleMouse);
 
     //
     // public functions
