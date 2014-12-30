@@ -12,23 +12,24 @@ quickly shows results for [duplicity][2].
 By coincidence, my [Raspberry Pi B+][3] has just arrived and as it operates with
 a power of [around 1.5 Watts][4] (with an wifi dongle) it is ideal to leave
 running doing the backups. At least while I don't need it as a media center, of
-course. So lets configure a backup system with the Pi, duplicity and S3 as the
-storage.
+course. So lets configure a backup system with the Pi (for short), duplicity and
+S3 as the storage.
 
 Base image
 ----------
 
 First we need to choose a base system for the Pi. If we also want a media server
-to occupy then [Raspbmc][5] seems pretty good. It has the added bonus of
-allowing to pre-configure the network settings which makes the first boot work
-even through wifi. 
+to occupy the cold nights then [Raspbmc][5] seems pretty good. Besides being a
+debian and having XBCM pre-configured it has the added bonus of allowing to
+pre-configure the network settings, which makes the first boot work even through
+wifi.
 
-We have to download and run the installer which then, in turn, downloads the
+We start by downloading and run the installer which then, in turn, downloads the
 latest Raspbmc network image and writes it to the micro USB card. After that, we
-just plug the Pi to the TV and to the power and watch it boot. The first boot
-takes a while but it is possible to monitor it's progress on the TV. Just be
-sure that the DVI is connected when the Pi starts because sometimes connecting
-the DVI cable afterwards did not work as expected, for me.
+just plug the Pi to the TV, plug it to the power and watch it boot. The first
+boot takes a while but it is possible to monitor it's progress on the TV. Just
+be sure that the DVI is connected when the Pi starts because connecting the DVI
+cable afterwards didn't always work.
 
 After a few restarts we get a configured XBMC. Tada! Anyway, today we're trying
 to configure a backup system so let's move on.
@@ -37,7 +38,7 @@ First run with Duplicity
 ------------------------
 
 The Raspbmc system provides an SSH server and we can connect with the user "pi"
-and the password "raspberry", by default. The user pi is also a sudoer so
+and the password "raspberry", by default. The user "pi" is also a sudoer so
 installing duplicity with support for S3 backups is rather easy.
 
 {% highlight bash %}
@@ -75,10 +76,10 @@ Errors 0
 -------------------------------------------------
 {% endhighlight %}
 
-We can see that by default duplicity asks for a password and encrypts the files
-stored in the target location. In order to have an automated backup system it
-needs to be non-interactive. We can achieve that easily by using an environment
-variable.
+We can see that, by default, duplicity asks for a password and encrypts the
+files stored in the target location. In order to have an automated backup system
+it needs to be non-interactive. That can achieved easily with the use of an
+environment variable.
 
 {% highlight bash %}
 $ PASSPHRASE=testing duplicity src file://dst
@@ -92,20 +93,22 @@ options to GPG.
 $ PASSPHRASE=testing duplicity --gpg-options --cipher-algo=AES256 src file://dst
 {% endhighlight %}
 
-We already installed Python support for the Amazon Storage backend so the file
-destination can be changed to an S3 URL and everything works as before. The
-typical S3 URL has the form `s3://s3-<region>.amazonaws.com/<bucket>/path` (as
-indicated in the [S3 Documentation][6]). We also need to setup the
-authentication and pass the access key id and secret key. This can be done with
-the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables.
+We already installed support for the Amazon storage -- with `python-boto` -- so
+the file destination can be changed to an S3 URL and everything works as
+before. A typical S3 URL has the form
+`s3://s3-<region>.amazonaws.com/<bucket>/<path>` but there are other forms you
+can check in the [S3 Documentation][6]. Using the S3 backend requires us to
+setup the authentication and pass the Amazon's AWS access key id and secret
+key. This can be done with the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+environment variables.
 
 Scripting duplicity
 -------------------
 
 In order to control the amount of options a script comes in handy. Also, having
-a script also allows us run the backup easily and control more aspects of the
-backup. Lets start by putting the basics in a Bash script and accumulate
-logging in a file.
+a script allows us to run the backup easily and control more aspects of the
+backup. Lets start by putting the basics in a Bash script and accumulate logging
+in a file.
 
 {% highlight bash %}
 #!/bin/bash
@@ -125,9 +128,9 @@ export AWS_SECRET_ACCESS_KEY="<secret>"
 duplicity $OPTIONS "$SOURCE" "$TARGET" >> $BASEDIR/duplicity.log 2>&1
 {% endhighlight %}
 
-The options were expanded, for example, to use a local cache directory with the
-`--archive-dir` option. The cache directory is where duplicity keeps the
-non-encrypted control files (manifest and sigtar). Keeping those next to the
+The options were expanded, for example, to specify a local cache directory with
+the `--archive-dir` option. The cache directory is where duplicity keeps the
+non-encrypted control files (manifest and sigtar). Keeping the cache next to the
 script is a great way to keep track of progress and correct possible problems.
 
 Scheduled Backup
@@ -135,31 +138,35 @@ Scheduled Backup
 
 Now that we have a script, a scheduled backup would be great. Cron is the
 obvious choice but apparently it is not enabled by default in Raspbmc. The
-easiest way to enable Cron is through XBMC UI under *Programs -> Raspbmc
+easiest way to enable Cron is through the XBMC UI under *Programs -> Raspbmc
 Settings -> System Configuration -> Service Management -> Cronjob
 Scheduler*. After Cron is enabled we can create a file under `/etc/cron.d` with
-commands. Any file placed there will be processed after 1 minute.
+the commands we want to schedule. Note that any file placed there will be
+processed after 1 minute which means that changes and new commands will be in
+effect 2 minutes later.
 
 {% highlight text %}
 # min hour day  month weekday user command
   15  21   *    *     1       pi   /home/pi/backup/duplicity.sh
 {% endhighlight %}
 
-This will run the duplicity script at midnight of every Monday, that is, it will
-do an incremental backup every week. Any output from the scripts are mailed to
-the local user. In our case the script produces no output because everything is
-redirected so if we want mails we must take care of that explicitly.
+This will run the duplicity script at 9:15 PM of every Monday, that is, it will
+do an incremental backup every week (after the first full backup, off
+course). Any output from cron scripts are mailed to the local user and you can
+use that. Nevertheless, the previous script has no outpu because duplicity's
+output is redirect to a log file. We we must take care of sending email
+explicitly but, then again, we have more control of the email that is sent.
 
 Configuring Email
 -----------------
 
-The idea is to have and email, at the end of the backup, indicating if
-everything went has expected or not. That can be accomplished with the subject
-line and so the body of the email can take the full output of the backup, for
-example.
+The idea is to have an email, at the end of the backup, indicating if everything
+happened has expected or not. That can be accomplished with the subject line
+which means we can use the body of the email for the full output of the backup,
+for example.
 
-The first thing we need is to install missing software. There are a few options
-but one of the simplest and most common is sSMTP.
+The first thing we need to do is install the missing software. There are a few
+options but one of the simplest and most common is sSMTP.
 
 {% highlight bash %}
 $ sudo apt-get install ssmtp mailutils
@@ -196,26 +203,26 @@ FromLineOverride=YES
 {% endhighlight %}
 
 We also need to change `/etc/ssmtp/revaliases` to give a valid address to the
-local users `root` (running cron and other services) and `pi` running the
-backup with duplicity (and XBMC). The revaliases is pretty simple.
+local users `root` (running cron and other services) and `pi` running the backup
+with duplicity (and XBMC). The revaliases file is pretty simple.
 
 {% highlight text %}
 root:your.account@gmail.com:smtp.gmail.com:587
 pi:your.account@gmail.com:smtp.gmail.com:587
 {% endhighlight %}
 
-There several sources online that can help fine-tuning the configuration but
+There are several sources online that can help fine-tuning the configuration but
 this is enough to be able to send emails. To test the configuration we can use
 the `mail` command.
 
 {% highlight bash %}
-$ echo Hello | mail -s "Test mail" "your.account@gmail.com"
+$ echo Hello | mail -s "World of Mail" "your.account@gmail.com"
 {% endhighlight %}
 
 If you received the email then we can change the backup script and add a mail
-notification to the end of the script. If everything goes well we include "OK"
-in the subject and otherwise we add "ERR" to make it clear that something did
-not work.
+notification at the end of it. If the backup had no problems we include "OK" in
+the subject. Otherwise we add "ERR" to make it clear that something did not work
+as expected.
 
 {% highlight bash %}
 #!/bin/bash
@@ -248,12 +255,23 @@ cat $LOG >> $BASEDIR/duplicity.log
 rm -f $LOG
 {% endhighlight %}
 
-Rotate Log
-----------
+You can test it from the command line. To make things a little more interesting
+we can increase the verbosity of the backup.
+
+{% highlight bash %}
+$ OPTIONS="-v info" ./duplicity.sh
+{% endhighlight %}
+
+While it is running you can see that the script creates a log file based on the
+PID. At the end of it the mail is sent, that log file is added to the main log
+and then removed.
+
+Rotating the Log
+----------------
 
 Although the amount of logging is small, by default, in order to be able to
-leave the Rasberry Pi alone we still need to ensure the log does not grow
-forever. Rotating the log is a matter of creating a new file under
+leave the Rasberry Pi completely alone we still need to ensure the log does not
+grow forever. Rotating the log is a matter of creating a new file under
 `/etc/logrotate.d` like the following.
 
 {% highlight text %}
@@ -276,36 +294,40 @@ reality not everything works as expected with duplicity.
 
 In my particular case the source files are in a NAS that is mounted locally
 through CIFS. The NAS goes to sleep at midnight and, when the backup is still
-running, duplicity fails. That should not be a problem because duplicity knows
-how to resume a backup. Nevertheless it so happens that version 0.6.18 (included
-in Rasbian Wheezy) has a bug and the restart is not so great. After the a full
-backup of 200GB, that took a couple of days and a couple of restarts, the next
-incremental backup uploaded almost 100GB. Not a good signal because no file was
-changed in the source location.
+running, duplicity fails. That was expected and should not be a problem because
+duplicity has support resume a backup. Nevertheless it so happens that
+version 0.6.18 (included in Rasbian Wheezy) has a bug and the restart is not so
+great. For example, after a full backup of 200GB, which took a couple of days
+and experienced a few restarts, the next incremental backup uploaded almost
+100GB. Not a good signal, since no file was changed in the source location.
 
 So, next stop, upgrade. There is a version 0.6.24 in the Raspbian repositories
 under the Jessie distribution. Instead of adding the distribution to the
 `sources.list` I've just downloaded the package and installed it directly. All
 the dependencies are satisfied so no problem there. Using that new version I've
-run a few tests just to find out that this version has another bug. When a
-system error is encountered duplicity does not exit completely because a GPG
-process is left hanging.
+run a few tests just to find out that, although the restarts seem to work, this
+version has another bug. When a system error is encountered duplicity does not
+exit completely because a GPG process is left hanging and this forced me to kill
+the process by hand.
 
-This problem does not seem known and there is not more recent package to try so
-hard luck. I found [duplicity's page at Launchpad][7] and checked that the last
-source version (0.6.25) had no bug-fix for that error. So bug [#1395341][8] was
-opened. While I was exploring Launchpad and duplicity's source code I decided to
-give it a try and fix the bug. After learning the basics of Bazaar and
-installing the required dependencies in a virtual machine it turned out to be
-simple to spot and fix resulting in [a patch][9], [a branch][10], and
-[a merge proposal][11] which, by the way, was eventually accepted and is added
-to both [0.6][12] and [0.7][13] branches. Woo hoo!
+This problem does not seemed known and there is not more recent package to try
+so hard luck. I found [duplicity's page at Launchpad][7] and checked that the
+last source version (0.6.25) had no bug-fix for that error. That lead to the
+creation of and account and opening bug [#1395341][8]. While I was exploring
+Launchpad and the source code for duplicity, I decided to give it a try in
+fixing the bug. After learning the basics of Bazaar and installing the required
+dependencies, in a virtual machine, the bug turned out to be simple to spot and
+fix. This resulted in [a patch][9], [a branch][10], and [a merge proposal][11]
+which, by the way, was eventually accepted and is added to both [0.6][12] and
+[0.7][13] branches. Woo hoo!
 
 Looking at the packages we can see that the next Ubuntu release will include
-version 0.6.23 of duplicity so it will take a while before 0.6.26 or 0.7 are
-included in a stable Debian release. The alternative is to download the 0.6.25
-tarball, apply the patch, install the required build tools, build duplicity from
-source and use the custom version by setting `PATH` and `PYTHONPATH`.
+version 0.6.23 of duplicity which means it will take a while before 0.6.26
+or 0.7 are included in a stable (or event testing) Debian release. The
+alternative is to download the 0.6.25 tarball, apply the patch, install the
+required build tools, build duplicity from source and use the custom version by
+setting `PATH` and `PYTHONPATH`. It's actually simpler than it looked at first
+despite the fact you have to bring development tools into the system.
 
 {% highlight bash %}
 $ sudo apt-get install gcc patch librsync-dev python-dev
@@ -340,31 +362,34 @@ duplicity 0.6.25
 {% endhighlight %}
 
 The deprecation warning was added recently to the 0.6 branch of duplicity. You
-can always try the new 0.7.x versions. Nevertheless if you define `PATH` and
+can always try the new 0.7.x versions. Nevertheless, if you define `PATH` and
 `PYTHONPATH` as above at the start of the backup script the new patched
 duplicity will be used.
 
 Wrapping up
 -----------
 
-Despite the problems in the last step, with duplicity we can setup a simple,
-secure, and efficient backup system to the cloud. All the tools are readily
-available - including development tools - and are easy to setup in the Raspberry
-Pi.
+Despite all the problems in the last step, it's obvious that with duplicity we
+can setup a simple, secure, and efficient backup system to the cloud. All the
+tools are readily available -- including the development tools -- and are easy
+to setup in the Raspberry Pi.
 
 When you know what to do, setting up the backup from scratch would take less
-than 1 hour but then all the testing and modifications of the script can take
-days or weeks. We can expand the script to allow restoring files and purging old
+than 1 hour. But then, all the testing and modifications of the script take days
+or weeks. We can expand the script to allow restoring files and purging old
 backups from the remote storage. We can also change the encryption to use public
 key encryption and the GPG agent. The sky (or your shell script skills) is the
-limit. You can also look a projects like [Duply][14] which, I guess, started
-much in the same way and now provides a very advanced script.
+limit. Projects like [Duply][14], I guess, started much in the same way and now
+provides a very advanced script with a lot of extra features. It does not include
+custom mail notifications, though, an relies on cron emails.
 
-It all depends if you are trying to keep things simple, totally under your
-control, or just a number of features quickly. In all cases, though, you will
-need to read a bit of documentation because every configuration aspect is
-important is you want to ensure your backup is secure and can be restored when
-you actually need it.
+It all depends on your needs. If you are trying to keep things simple or totally
+under your control you may want to start your script. Otherwise starting with a
+powerful foundation and grow from there may be approprate. In all cases, though,
+you will need to read a bit of documentation because most configuration options
+are important. In the end, we want a backup that is simple, fast, secure and,
+most of all, that we can restore when we actually need it which by definition is
+the worst moment possible.
 
 
 [1]: /blog/2014/11/26/durability-in-cloud-backup/
