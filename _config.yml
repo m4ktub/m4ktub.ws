@@ -1,47 +1,125 @@
 #
-# Jekyll Configuration File
+# site
+#
+url: http://m4ktub.ws
+root: /
+
+title: m4ktub
+subtitle: Because some things need to be written.
+description: A personal blog with pseudo-random topics that are mostly related with programming.
+since: 2014
+
+author: Cláudio Gil
+author_title: Software Engineer
+avatar: images/avatar.jpg
+location: Portugal
+follow: https://github.com/m4ktub
+
+#
+# language
 #
 
-# Site Information
-name: m4ktub
-domain: m4ktub.ws
-author: Cláudio Gil
-tagline: Because some things need to be written.
-inceptionYear: 2014
+language: en
 
-# Full url format for posts
-permalink: /blog/:year/:month/:day/:title
+# 
+# time
+#
 
-# Generation
-encoding: UTF-8
-markdown: kramdown
-highlighter: pygments
+timezone: UTC
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
 
-# Github
-github:
-    name: m4ktub
-    project: m4ktub.ws
-    branch: master
+#
+# permalinks
+#
 
-# Facebook
-facebook:
-    name: claudio.f.gil
+permalink: posts/:year/:month/:day/:perma/
+permalink_defaults:
+  perma: undefined
 
-# Google Analytics
-ga:
-    id: UA-50377751-1
+#
+# news feed
+#
 
-# Social Links
-links:
-    - name: Facebook
-      url: http://www.facebook.com/claudio.f.gil
-    - name: LinkedIn
-      url: https://www.linkedin.com/in/claudiogil
-    - name: Google+
-      url: https://plus.google.com/114986524048776058715
-    - name: Wuala
-      url: https://www.wuala.com/m4ktub
-    - name: Last.fm
-      url: http://last.fm/user/m4ktub
-    - name: GitHub
-      url: https://github.com/m4ktub
+feed:
+  type: atom
+  path: atom.xml
+  limit: 10
+
+# 
+# paths
+#
+
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+
+#
+# writing
+#
+
+default_layout: post
+new_post_name: :year-:month-:day-:title.md
+titlecase: false
+filename_case: 0
+post_asset_folder: true
+
+#
+# generating
+#
+
+render_drafts: false
+future: true
+
+# pagination
+per_page: 1
+pagination_dir: posts/page
+
+# archive
+archive_generator:
+  per_page: 0
+  
+#
+# rendering
+#
+
+relative_link: false
+  
+marked:
+  # no automatic line breaks
+  gfm: false
+
+highlight:
+  enable: true
+  line_number: true
+  auto_detect: true
+  tab_replace:
+
+skip_render:
+  # do not process javascript files (#1194)
+  - '**/*.js'
+  - 'experiments/**/*'
+
+# 
+# category & tags
+#
+
+default_category: uncategorized
+category_map:
+tag_map:
+
+#
+# theme
+#
+
+theme: icarus
+
+#
+# comments
+#
+
+disqus_shortname: m4ktubws

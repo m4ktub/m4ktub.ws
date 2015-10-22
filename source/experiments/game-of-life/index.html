@@ -1,0 +1,197 @@
+<!-- style -->
+
+<style>
+ .information {
+   margin: 4px 0px;
+ }
+
+ canvas {
+   border: 1px solid darkgray;
+   box-shadow: 0px 0px 3px 0px darkgray;
+ }
+
+ .pattern {
+   display: none;
+ }
+
+ .game canvas {
+   float: left;
+ }
+
+ .game .information {
+   float: left;
+   margin-left: 2em;
+ }
+
+ .information th {
+   text-align: right;
+   font-weight: normal;
+   padding-right: 10px;
+ }
+
+ .controls {
+   clear: both;
+   padding-top: 1em;
+ }
+</style>
+
+<!-- structure -->
+
+<div class="game">
+  <div id="pat-ggg" class="pattern" title="Gosper Glider Gun">
+    |                                      |
+    |                         x            |
+    |                       x x            |
+    |             xx      xx            xx |
+    |            x   x    xx            xx |
+    | xx        x     x   xx               |
+    | xx        x   x xx    x x            |
+    |           x     x       x            |
+    |            x   x                     |
+    |             xx                       |
+    |                                      |
+  </div>
+
+  <div id="pat-rpentamino" class="pattern" title="R-pentamino">
+    |  xx |
+    | xx  |
+    |  x  |
+  </div>
+
+  <div id="pat-diehard" class="pattern" title="Diehard">
+    |       x  |
+    | xx       |
+    |  x   xxx |
+  </div>
+
+  <div id="pat-acorn" class="pattern" title="Acorn">
+    |  x      |
+    |    x    |
+    | xx  xxx |
+  </div>
+
+  <div class="instructions">
+    <p>You can scrool to zoom and drag to move the pattern around.</p>
+  </div>
+
+  <div class="game">    
+    <canvas id="gol" width="400px" height="300px"></canvas>
+    
+    <table class="information">
+      <tr>
+        <th scope="row">Steps:</th>
+        <td><span id="step">0</span></td>
+      </tr>
+      <tr>
+        <th>Population:</th>
+        <td><span id="population">0</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="controls">    
+    <button id="bRun">Run</button>
+    <button id="bPause" disabled="disabled">Pause</button>
+    <button id="bStep">Step</button>
+    <button id="bReset">Reset</button>
+    <select onchange="selectPattern(this.value);">
+      <option value="pat-ggg">Gosper Glider Gun</option>
+      <option value="pat-rpentamino">R-pentamino</option>
+      <option value="pat-diehard">Diehard</option>
+      <option value="pat-acorn">Acorn</option>
+    </select>
+  </div>
+</div>
+
+<div class="changes">
+  <p>Changes</>
+  <ul>
+    <li>
+      <strong>0.4</strong> - <span class="date">2014-11-29</span>
+      <ul>
+        <li>Fixed mouse wheel event in Firefox and IE.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>0.3</strong> - <span class="date">2014-08-11</span>
+      <ul>
+        <li>Renamed some elements while writing about the implementation.</li>
+        <li>Algorithm now uses an infinite space instead of toroidal.</li>
+        <li>Added a few more patterns and a way to post.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>0.2</strong> - <span class="date">2014-07-17</span>
+      <ul>
+        <li>Added zoom and pan to the canvas.</li>
+        <li>Separated interactivity logic from automaton evolution.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>0.1</strong> - <span class="date">2014-05-06</span>
+      <ul>
+        <li>Initial version with a non-interactive canvas.</li>
+        <li>Game of life implemented with a toroidal area with the same
+          size of the canvas.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<!-- scripting -->
+
+<script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.2.0/prototype.js"></script>
+<script src="js/ext/AnimationFrame.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/animation-loop.js"></script>
+<script src="js/automaton.js"></script>
+<script src="js/game-of-life.js"></script>
+
+<script>
+ // provide consistent animation frames
+ AnimationFrame.shim();
+
+ // the canvas
+ var canvas = $('gol')
+ var pattern = $('pat-ggg').innerHTML;
+
+ // create game structure
+ var loop = new AnimationLoop({
+   controls: {
+     start: 'bRun',
+     stop: 'bPause',
+     step: 'bStep',
+     reset: 'bReset'
+   },
+
+   game: new CellAutomaton({
+     scale: 5.0,
+     canvas: canvas,
+     algorithm: new GameOfLife({
+       pattern: pattern
+     })
+   }),
+
+   afterStep: function(loop) {
+     var state = loop.game.algorithm.state;
+     $('step').innerHTML = state.generation;
+     $('population').innerHTML = state.population;
+   },
+
+   afterReset: function(loop) {
+     var state = loop.game.algorithm.state;
+     $('step').innerHTML = state.generation;
+     $('population').innerHTML = state.population;
+   }
+
+ });
+
+ //  change pattern
+ function selectPattern(value) {
+   loop.game.algorithm.load($(value).innerHTML);
+   loop.reset();
+ }
+
+ // start things up
+ loop.reset();
+</script>
