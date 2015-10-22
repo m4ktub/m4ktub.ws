@@ -82,7 +82,15 @@ pagination_dir: posts/page
 # archive
 archive_generator:
   per_page: 0
-  
+
+# category
+category_generator:
+  per_page: 0
+
+# tag
+tag_generator:
+  per_page: 0
+
 #
 # rendering
 #
