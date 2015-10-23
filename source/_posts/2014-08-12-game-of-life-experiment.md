@@ -1,5 +1,5 @@
 ---
-perma: game-of-life-experiment
+s: game-of-life-experiment
 title: Game of Life
 date: 2014-08-12
 categories: experiments

@@ -1,5 +1,5 @@
 ---
-perma: durability-in-cloud-backup
+s: durability-in-cloud-backup
 title: Durability in Cloud Backup
 date: 2014-11-26 02:41:55
 categories: ideas

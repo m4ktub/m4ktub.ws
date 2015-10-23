@@ -1,9 +1,6 @@
 ---
-perma: {{ title }}
 title: {{ title }}
-date: 
 categories: 
-tags: []
+tags: 
 thumbnail: 
-comments: false
 ---

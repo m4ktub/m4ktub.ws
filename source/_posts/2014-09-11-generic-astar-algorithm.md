@@ -1,5 +1,5 @@
 ---
-perma: generic-astar-algorithm
+s: generic-astar-algorithm
 title: Generic A* Algorithm
 date: 2014-09-11
 categories: experiments

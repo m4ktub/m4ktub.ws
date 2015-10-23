@@ -33,9 +33,8 @@ time_format: HH:mm:ss
 # permalinks
 #
 
-permalink: posts/:year/:month/:day/:perma/
+permalink: posts/:year/:month/:day/:s/
 permalink_defaults:
-  perma: undefined
 
 #
 # news feed

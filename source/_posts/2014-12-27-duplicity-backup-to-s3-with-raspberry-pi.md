@@ -1,5 +1,5 @@
 ---
-perma: duplicity-backup-to-s3-with-raspberry-pi
+s: duplicity-backup-to-s3-with-raspberry-pi
 title: Duplicity Backup to S3 with Raspberry PI
 date: 2014-12-27
 categories: projects

@@ -1,5 +1,5 @@
 ---
-perma: conway-hates-game-of-life
+s: conway-hates-game-of-life
 title: Conway Hates the Game of Life?
 date: 2014-08-29
 categories: news
