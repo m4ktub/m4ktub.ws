@@ -2,11 +2,12 @@
 s: duplicity-backup-to-s3-with-raspberry-pi
 title: Duplicity Backup to S3 with Raspberry PI
 date: 2014-12-27
+updated: 2015-11-05
 categories: projects
 tags: [backup, cloud, amazon, s3, rasberry-pi, duplicity]
 thumbnail: /images/pi-aws.png
 ---
-
+ 
 After [my search][1] for a durable online backup, the conclusion was *I need to
 encrypt my files and backup them to S3*. So how do I do that? There are probably
 a couple of ways to do it but a search for "encrypted backup s3", in Google,
@@ -156,7 +157,7 @@ effect 2 minutes later.
 This will run the duplicity script at 9:15 PM of every Monday, that is, it will
 do an incremental backup every week (after the first full backup, off
 course). Any output from cron scripts are mailed to the local user and you can
-use that. Nevertheless, the previous script has no outpu because duplicity's
+use that. Nevertheless, the previous script has no output because duplicity's
 output is redirect to a log file. We we must take care of sending email
 explicitly but, then again, we have more control of the email that is sent.
 
@@ -388,14 +389,14 @@ custom mail notifications, though, an relies on cron emails.
 
 It all depends on your needs. If you are trying to keep things simple or totally
 under your control you may want to start your script. Otherwise starting with a
-powerful foundation and grow from there may be approprate. In all cases, though,
+powerful foundation and grow from there may be appropriate. In all cases, though,
 you will need to read a bit of documentation because most configuration options
 are important. In the end, we want a backup that is simple, fast, secure and,
 most of all, that we can restore when we actually need it which by definition is
 the worst moment possible.
 
 
-[1]: /blog/2014/11/26/durability-in-cloud-backup/
+[1]: /posts/2014/11/26/durability-in-cloud-backup/
 [2]: http://duplicity.nongnu.org/
 [3]: http://www.raspberrypi.org/products/model-b-plus/
 [4]: http://raspi.tv/2014/how-much-less-power-does-the-raspberry-pi-b-use-than-the-old-model-b
