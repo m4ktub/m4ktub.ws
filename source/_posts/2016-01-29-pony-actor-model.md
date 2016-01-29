@@ -1,12 +1,14 @@
 ---
 title: Many Ponies Can Act Together
-s: ponylang-actor-model
 categories: ideas
 tags:
   - actor-model
   - ponylang
   - concurrency
   - scalability
+  - micro-services
+s: ponylang-actor-model
+date: 2016-01-29 23:30:05
 thumbnail:
 ---
 
@@ -28,7 +30,7 @@ The infrastructure side of it, that is, the machines and networks needed to
 serve the amount of users you have and the ability to scale up or down those 
 resources can be obtained as a service. The IaaS services like [AWS], [Google 
 Cloud], or [Azure] allow you, in the very minimum to react from 1 user to a 
-million in a day. Some of them even allow to dynamically scale scale based on a 
+million in a day. Some of them even allow to dynamically scale based on a 
 schedule (prediction) or metrics (reaction).
 
 {% asset_img sstrats.png Scaling strategies %}
@@ -43,15 +45,16 @@ Scalable web applications
 
 The service needs to be developed in a way that can take advantage of a dynamic
 infrastructure without being so complex that, while you can scale from 1 machine
-to several in minutes, you can't develop a new feature without days of testing 
-or bugs. Some recent advancements - or trends - have changed how web applications are developed and allowed some of the manageable scalability that
-was truly needed.
+to several in minutes, you can't develop a new feature without days of 
+integrations, testing, or bugs. Some recent advancements - or trends - have 
+changed how web applications are developed and led to some of the manageable 
+scalability that was truly needed.
 
-The popularization of [REST] allowed the recognition of the layered nature of the
-web and the constraints needed for scalable web applications. With REST, the idea
-that an application is essentially broken in two between and an explicit API is
-needed between the client and the server allowed a proliferation of reusable
-JSON services. The trend is still going and peeking with [single-page 
+The popularization of [REST] allowed the recognition of the layered nature of 
+the web and the constraints needed for scalable web applications. With REST, 
+the idea that an application is essentially broken in two, and that an explicit 
+API is needed between the client and the server, allowed a proliferation of 
+reusable JSON services. The trend is still going and peeking with [single-page 
 applications (SPA)][SPA].
 
 The server provides a stateless API which allows to break the service in multiple
@@ -63,6 +66,10 @@ from 1 to 1 million users then your client layer has scaled to 1 million hosts.
 This does not count getting the resources for the application but that's also 
 part of the API which you can scale and optimize with cache.
 
+It's a little more complex to develop and maintain. You have to to use a lot of
+simple patterns the communication between server and client. But simple patterns
+and a explicit interface still keep things predictable and manageable.
+
 Micro Services
 --------------
 
@@ -73,35 +80,35 @@ affecting the rest (continuously deliver small improvements). Nevertheless, once
 you decouple components with a clear REST interface you have micro scalability.
 You can scale only some functional components and not everything together.
 
-Life was great if not for the burden of keeping it all up. Yes, you can quickly
-fix and roll out the problem with the moderation service without affecting any
-of the other services in the application. But you have to be able to manage it
-all. It requires good design and organization because if you miss it, then all
-those APIs that where there to allow you to change and scale the component
-freely turn against you.
+Life was great if not for the burden of keeping it all up. Yes, you can quickly 
+fix and roll out the problem with the "moderation service" without affecting 
+any of the other, in the application. But you have to be able to manage it all. 
+It requires good design and organization because if you miss it, then all those 
+APIs that where there to allow quick and independent change and to permit 
+scaling out the component, turn against you.
 
 Good Enough
 -----------
 
-And it's all communicating with HTTP request-replies. The amazing thing is that 
-it works most of the time. Sometimes the user gets created but sending the mail 
-fails? Let the user register again and reuse the account. Or let the user do a
-"Recover Password" to get to a known state again. You would probably do that
-anyway and it's easier than to make a distributed transaction.
+... And it's all communicating with HTTP request-replies. The amazing thing is 
+that it works most of the time. Sometimes the user gets created, in the store, 
+but sending the confirmation email fails? Just let the user register again and 
+reuse the account. Or let the user do a "Recover Password" to get to a known 
+state again. You would probably implement those features anyway anyway and it's 
+easier than to make a distributed transaction.
 
-This "is good enough" strategy is a power-full strategy. It allows to just do
-something and then, at the end, realize the problem you didn't want to happen,
-like losing data, is quite rare and there are simple ways to minimize it, even
-further. If you started by really solving the problem so that it never happens, 
-you could not have started at all. For example, all those [eventually 
-consistent] systems optimize for availability. What is important is to be 
-there, and not to be right. For most users, in Facebook, missing one post or
-not having the true number of likes in a post is not life-or-death. And the 
-realization that this is acceptable by users in many scenarios allowed a
+This "is good enough" strategy is a power-full strategy. It allows to just do 
+something and then, at the end, realize the problem you didn't want to happen, 
+like losing data, is quite rare and there are simple ways to minimize it even 
+further. If you started by solving the problem, so that it never happens, you 
+could not have started at all. For example, all those [eventually consistent] 
+systems optimize for availability. What is important is to be there, and not to 
+always be right. For most users, in Facebook for example, missing one post or 
+not having the true number of likes shown in a post is not life-or-death. And 
+the realization that this is acceptable by users, in many scenarios, allowed a 
 proliferation of eventually consistent solutions.
 
-Still, it would be nice to be able to be both. Be able to respond always and with
-the correct information. 
+Still, it would be nice to be able to be both. Be able to always respond with the right answer. 
 
 Actors
 ------
@@ -119,7 +126,8 @@ If we adopt a micro-service architecture, with all its management cost, for the
 benefits of continuous delivery. Adopting the actor model seems a safer bet. For
 example, in Pony, the aim is to allow you to write and maintain what is 
 essentially a monolithic application and have the runtime identity, distribute, 
-and scale the micro-services, in your application, automatically. 
+and scale the micro-services automatically. At least that is the expectation and
+it would be fun.
 
 [pony]: http://www.ponylang.org/
 [AWS]: https://aws.amazon.com/ec2/
