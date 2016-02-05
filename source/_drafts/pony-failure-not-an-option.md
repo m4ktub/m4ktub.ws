@@ -21,7 +21,7 @@ Things fail
 
 So Distributed Pony is _vaporware_, right now. It has a prototype that works under unrealistic assumptions. It may have had progress in the last 2 years but the reality didn't change. The network is unreliable and things fail. Therefore you cannot send a message between actors (that can be in different hosts) and count on it being processed. The message may never reach the destination, the node may have failed, or the response may have been lost.
 
-[Erlang] and [Akka] deal with it explicitly stating you have only one guarantee, and it is a local guarantee: remote nodes are monitored and local actors can know about it. There is no guarantee that a remote actor is really down, as you will never get that guarantee, but in a combination of monitoring and timeouts you can program an actor to deal with unavailability. 
+[Erlang] and [Akka] deal with it by explicitly stating you only have the guarantee, and it is a local guarantee, that remote nodes are monitored and local actors can know about it. There is no guarantee that a remote actor is really down, as you will never get that guarantee, but in a combination of monitoring and timeouts you can program an actor to deal with unavailability. 
 
 The other part, is that, in those systems the topology is user-defined. When something fails, since you had to think about the topology, your program is already coded accordingly. When node _A_ fails you fall-back to _B_ because you know there is a node _B_.  
 
