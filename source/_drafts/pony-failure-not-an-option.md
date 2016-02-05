@@ -14,16 +14,24 @@ thumbnail:
 
 In [the last post][post-1] I've commented that the actor model was well suited for the kind of web applications and services being created nowadays. I've also commented that [Pony], in particular, was well positioned to allow developing applications that would automatically distribute and scale. More specifically, the aim of Distributed Pony was to allow you to create a monolithic application and have the Pony Runtime automatically identify and distribute the micro-services within (actors, really) through the available resources.
 
-Then I've read [A String of Ponies][dpony], by Sebastian Blessing, that felt as one of those movies were you're told, at the end, that everything was a dream. It's a good thesis. It shows interesting results and how Concurrent Pony was extended for the distributed setting. It's major sin, though, was to avoid the big elephant in the room -- the failure of a node or the network -- until the very end. Even then, just to say the problem was not addressed (which after 70 pages I'd already noticed) and without a credible path for future work.
-
 Things fail
 -----------
 
+Then I've read [A String of Ponies][dpony], by Sebastian Blessing, that felt as one of those movies were you're told, at the end, that everything was a dream. It's a good thesis. It shows interesting results and how Concurrent Pony was extended for the distributed setting. It's major sin, though, was to avoid the big elephant in the room - the failure of a node or the network - until the very end. Even then, just to say the problem was not addressed (which after 70 pages I'd already noticed) and without a credible path for future work.
+
 So Distributed Pony is _vaporware_, right now. It has a prototype that works under unrealistic assumptions. It may have had progress in the last 2 years but the reality didn't change. The network is unreliable and things fail. Therefore you cannot send a message between actors (that can be in different hosts) and count on it being processed. The message may never reach the destination, the node may have failed, or the response may have been lost.
 
-[Erlang] and [Akka] deal with it by explicitly stating you only have the guarantee, and it is a local guarantee, that remote nodes are monitored and local actors can know about it. There is no guarantee that a remote actor is really down, as you will never get that guarantee, but in a combination of monitoring and timeouts you can program an actor to deal with unavailability. 
+Dealing with Failure
+--------------------
 
-The other part, is that, in those systems the topology is user-defined. When something fails, since you had to think about the topology, your program is already coded accordingly. When node _A_ fails you fall-back to _B_ because you know there is a node _B_.  
+[Erlang] and [Akka] deal with it by giving support for distribution but delegating the responsability to the user. The topology - what runs where - is managed explicity by the user that programs the application to launch actors in known nodes. This means the knowledge that something is distributed is explicit and you know that if _A_ fails you can fall-back to _B_ (you have set-up _B_ and coded the application with that scenario in mind).
+
+Still, both Erlang and Akka, give you the funcionality to monitor a node and ensure that if a node is unavailable you will always be informed of it. Akka also provides clustering capabilities which, in addition to monitoring, can ensure when a node sees other as down (permanently unavailalbe) it, and every other node, will never see the node as available again. With monitoring you can fallback to another actor, with clustering you can ensure failed things remain failed which is important to prevent corrupt, or inconsistent, state from generating errors.
+
+Transparent distribution
+------------------------
+
+TODO
 
 [post-1]: /posts/2016/01/29/ponylang-actor-model/
 [pony]: http://www.ponylang.org/
