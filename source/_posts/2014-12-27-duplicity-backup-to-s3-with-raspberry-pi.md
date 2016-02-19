@@ -1,8 +1,8 @@
 ---
 s: duplicity-backup-to-s3-with-raspberry-pi
 title: Duplicity Backup to S3 with Raspberry PI
-date: 2014-12-27
-updated: 2015-11-05
+date: 2014-12-27Z
+updated: 2015-11-05Z
 categories: projects
 tags: [backup, cloud, amazon, s3, rasberry-pi, duplicity]
 thumbnail: /images/pi-aws.png

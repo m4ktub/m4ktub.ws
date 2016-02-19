@@ -7,7 +7,8 @@ tags:
   - utopia
   - fallacy
 s: spell-checkers-for-hate
-date: 2015-12-09
+date: 2015-12-09Z
+updated: 2016-02-04Z
 thumbnail: /images/google-spell-checker.png
 ---
 

@@ -9,7 +9,7 @@ tags:
   - fault-tolerance
   - cap-theorem
 s: pony-failure-not-an-option
-date: 2016-02-09
+date: 2016-02-09Z
 thumbnail:
 ---
 

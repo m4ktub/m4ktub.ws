@@ -1,7 +1,7 @@
 ---
 s: conway-hates-game-of-life
 title: Conway Hates the Game of Life?
-date: 2014-08-29
+date: 2014-08-29Z
 categories: news
 thumbnail: http://img.youtube.com/vi/E8kUJL04ELA/1.jpg
 ---

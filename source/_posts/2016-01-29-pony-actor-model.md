@@ -8,7 +8,8 @@ tags:
   - scalability
   - micro-services
 s: ponylang-actor-model
-date: 2016-01-29
+date: 2016-01-29Z
+updated: 2016-02-04Z
 thumbnail:
 ---
 

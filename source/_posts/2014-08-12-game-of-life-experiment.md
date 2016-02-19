@@ -1,7 +1,7 @@
 ---
 s: game-of-life-experiment
 title: Game of Life
-date: 2014-08-12
+date: 2014-08-12Z
 categories: experiments
 experiment: game-of-life
 tags: [cellular, automaton, gol, canvas]

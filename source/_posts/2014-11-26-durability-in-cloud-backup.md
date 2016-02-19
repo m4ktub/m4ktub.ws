@@ -1,7 +1,7 @@
 ---
 s: durability-in-cloud-backup
 title: Durability in Cloud Backup
-date: 2014-11-26 02:41:55
+date: 2014-11-26Z
 categories: ideas
 tags: [cloud, backup, wuala, durability, sla, tos]
 thumbnail: /images/cloud-oops.png
