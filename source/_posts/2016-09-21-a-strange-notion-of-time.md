@@ -6,6 +6,7 @@ tags:
   - perception
 s: a-strange-notion-of-time
 date: 2016-09-21Z
+updated: 2016-09-26Z
 thumbnail:
 ---
 
