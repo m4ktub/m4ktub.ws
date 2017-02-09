@@ -13,6 +13,7 @@ tags:
 thumbnail: /images/mars-now-what.png
 s: destination-mars
 date: 2016-10-31Z
+updated: 2017-02-09Z
 ---
 
 It seems we officially have a new space race. Some time ago Boeing CEO [said][1]:
@@ -64,7 +65,7 @@ people on Mars sticks and a new space race begins. Let the race begging!
         </tr>
     </table>
     <span style="font-size: smaller;">Just put some numbers in one or more of the boxes and press "Race!". You can press "Reset!" to get the ships back at the start with new odds. From there you can try again.</span>
-    <input id="brace" type="button" value="Race!" onclick="animate();"/><input id="breset" type="button" value="Reset" onclick="reset();"/>
+    <input id="brace" type="button" value="Race!" onclick="race();"/><input id="breset" type="button" value="Reset" onclick="reset();"/>
     
 </div>
 <div style="position: relative; height: 330px;">
@@ -134,7 +135,7 @@ people on Mars sticks and a new space race begins. Let the race begging!
         }
     }
     
-    function animate() {
+    function race() {
         document.getElementById("ibetnasa").disabled = "disabled";
         document.getElementById("ibetspacex").disabled = "disabled";
         document.getElementById("ibetboeing").disabled = "disabled";
@@ -164,7 +165,7 @@ people on Mars sticks and a new space race begins. Let the race begging!
         }
         
         if (!stop) {
-            setTimeout(animate, 40);
+            setTimeout(race, 40);
         } else {
             var delta = 0;
             for (var name in rockets) {
