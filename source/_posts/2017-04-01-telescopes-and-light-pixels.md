@@ -11,11 +11,11 @@ s: telescopes-and-light-pixels
 date: 2017-04-01Z
 ---
 
-I've recently been offered a refracting telescope. I've always liked astronomy but never got to own one so I have little idea how to use it effectively. You just point and shoot? Oh, that's cameras. So you just point and look? More or less but I guess it's important to know how to use it and, at least, a little about how it actually works. I know people can use telescopes very well just by knowing what works and what does not work. Still I prefer to try to understand the basics about how it works and learn how to predict results. Let's say, instead of trying 3 configurations of lenses in 2 min, I prefer to read stuff for 1h and then get the configuration right at the first time.
+I've recently been offered a refracting telescope. I've always liked astronomy but never got to own one so I have little idea how to use it effectively. You just point and shoot? Oh, that's for cameras. So you just point and look? More or less but I guess it's important to know how to use it and, at least, a little about how it actually works. I know people can use telescopes very well just by knowing what works and what does not work. Still I prefer trying to understand the basics about how it works and learn how to predict results. Let's say, instead of trying 3 configurations of lenses in 2 min, I prefer to read stuff for 1h and then get the configuration right at the first time.
 
 Also, my first Google searches showed me that, regarding this topic, I had a lot of typical misconceptions and simplistic mental models of light. For example, being used to computers when I read that there is a maximum resolution for a telescope I've immediately though about pixels. It's strange, but I had no other model for a limit in imaging. Obviously I did not expect to look through the telescope and see a pixelized Jupiter but what would I see with maximum zoom?
 
-This is basically how I wrapped my head around the basics to predict what can I see through my telescope. I'll be using my telescope as reference for some of the examples. It is a [KONUSTART-900][1] which came with two Huygens lenses (an 8mm and a 20mm) as well as two Barlow lenses (with 1.5x and 2x magnification).
+This is basically how I wrapped my head around the basics to predict what can be seen through my telescope. Throughout the rest of the post I'll be using a [KONUSTART-900][1] as a reference for some of the measurments.
 
 Basics about refracting telescopes
 ----------------------------------
@@ -192,7 +192,7 @@ We should only care for the minimum magnification with "slow" telescopes that ar
  
   1. ${B_e = G/M^2 B_n = (D_o/7)^2/(F_o/F_e)^2 B_n = ((F_e xx D_o )/(7 xx F_o))^2 B_n = 1/49 (F_e/F_R)^2 B_n}$
   
-We see that we can make an approximation like ${2 F_e/F_R}$ by multiplying by 100 and rounding the constant to 2. Although there is a division and a square operation we can easily get some relations by assuming that an exit pupil of 0.5 mm is the minimum for our eye.
+We see that we can make an approximation like ${2 (F_e/F_R)^2}$ by multiplying by 100 and rounding the constant to 2. Although there is a division and a square operation we can easily get some relations by assuming that an exit pupil of 0.5 mm is the minimum for our eye.
 
   1. ${F_e = 8 xx F_R}$, the minimum magnification, will get us 128% brightness, that is a little brighter than we get by looking directly into the sky.
   2. ${F_e = 2 xx F_R}$, the maximum magnification, will get us 8% brightness.
