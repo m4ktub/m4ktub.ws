@@ -9,6 +9,7 @@ tags:
 thumbnail: jupiter-100px.png
 s: telescopes-and-light-pixels
 date: 2017-04-01Z
+updated: 2017-04-09Z
 ---
 
 I've recently been offered a refracting telescope. I've always liked astronomy but never got to own one so I have little idea how to use it effectively. You just point and shoot? Oh, that's for cameras. So you just point and look? More or less but I guess it's important to know how to use it and, at least, a little about how it actually works. I know people can use telescopes very well just by knowing what works and what does not work. Still I prefer trying to understand the basics about how it works and learn how to predict results. Let's say, instead of trying 3 configurations of lenses in 2 min, I prefer to read stuff for 1h and then get the configuration right at the first time.
