@@ -9,7 +9,7 @@ tags:
 thumbnail: jupiter-100px.png
 s: telescopes-and-light-pixels
 date: 2017-04-01Z
-updated: 2017-04-09Z
+updated: 2017-04-29Z
 ---
 
 I've recently been offered a refracting telescope. I've always liked astronomy but never got to own one so I have little idea how to use it effectively. You just point and shoot? Oh, that's for cameras. So you just point and look? More or less but I guess it's important to know how to use it and, at least, a little about how it actually works. I know people can use telescopes very well just by knowing what works and what does not work. Still I prefer trying to understand the basics about how it works and learn how to predict results. Let's say, instead of trying 3 configurations of lenses in 2 min, I prefer to read stuff for 1h and then get the configuration right at the first time.
@@ -60,9 +60,9 @@ A size of less than a millimetre seems very small but lets get an idea of what k
 Aperture and angular resolution
 -------------------------------
 
-The previous picture of Jupiter has 100 x 100 pixels but if we used an image sensor with a greater pixel density we would get a bigger picture, right? Not right. And actually, with that image sensor, the image we would get could not be that detailed because the telescope only has an aperture of 60mm. It turns out that diffraction creates an interference pattern at the focal plane and . But what does that mean exactly and why is the aperture relevant?
+The previous picture of Jupiter has 100 x 100 pixels but if we used an image sensor with a greater pixel density we would get a bigger picture, right? Not right. And actually, with that image sensor, the image we would get could not be that detailed because the telescope only has an aperture of 60mm. It turns out that diffraction creates an interference pattern at the focal plane. But what does that mean exactly and why is the aperture relevant?
 
-The [Double-slit experiment][10] is well known. The light wave coming from one slit interferes with the light wave from the other slit due to diffraction. But there is a also a "single-slit experiment" which means that diffraction happens whenever the is an obstacle or slit to the light. The resulting interference can be can modelled by considering that, after the slit, each ray of light spreads again in all directions like a wave. This means that each light ray produces a diffraction pattern instead of a point and two points must have enough separation to be distinguished. The image bellow illustrates this situation (more or less) and the minimum separation that permits to resolve two points (the Rayleigh criteria). 
+The [Double-slit experiment][10] is well known. The light wave coming from one slit interferes with the light wave from the other slit due to diffraction. But there is a also a "single-slit experiment" which means that diffraction happens whenever there is an obstacle to the light or slit through which it must pass. The resulting interference can be can modelled by considering that, after the slit, each ray of light spreads again in all directions like a wave. This means that each light ray produces a diffraction pattern instead of a point and two points must have enough separation to be distinguished. The image bellow illustrates this situation (more or less) and the minimum separation that permits to resolve two points (the Rayleigh criteria). 
 
 {% asset_img telescope-diffraction.png "The interference pattern of two rays of light" %}
 
