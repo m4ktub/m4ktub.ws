@@ -1,9 +1,10 @@
 ---
 title: Bitcoin Cash Defines Bitcoin
 categories: ideas
-tags: bitcoin fork money
+tags: [bitcoin, fork, money]
 s: bitcoin-cash-befines-bitcoin
 date: 2017-07-29Z
+updated: 2019-01-12Z
 ---
 
 For anyone following the [Bitcoin][BTC] scene in the last year, it's impossible to miss the ideological wars. Historically all the talk was about the technicalities of consensus in the blockchain, soft forks, and hard forks. But under all those discussions there was another kind of fork: a mental fork. Several groups see Bitcoin differently, through a different lens, and that makes technical discussions impossible since what one presents as a reason is absurd to the other.
