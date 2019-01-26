@@ -16,7 +16,7 @@ I've recently been offered a refracting telescope. I've always liked astronomy b
 
 Also, my first Google searches showed me that, regarding this topic, I had a lot of typical misconceptions and simplistic mental models of light. For example, being used to computers when I read that there is a maximum resolution for a telescope I've immediately though about pixels. It's strange, but I had no other model for a limit in imaging. Obviously I did not expect to look through the telescope and see a pixelized Jupiter but what would I see with maximum zoom?
 
-This is basically how I wrapped my head around the basics to predict what can be seen through my telescope. Throughout the rest of the post I'll be using a [KONUSTART-900][1] as a reference for some of the measurments.
+This is basically how I wrapped my head around the basics to predict what can be seen through my telescope. Throughout the rest of the post I'll be using a [KONUSTART-900][1] as a reference for some of the measurements.
 
 Basics about refracting telescopes
 ----------------------------------
