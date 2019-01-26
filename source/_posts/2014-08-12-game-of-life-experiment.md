@@ -994,7 +994,7 @@ source at [GitHub][gh1] and try [the live experiment][ex1]. Have fun!
 [gg1]: http://xefer.com/gameoflife
 [gg2]: http://www.julianpulgarin.com/canvaslife/
 [gg3]: http://pmav.eu/stuff/javascript-game-of-life-v3.1.1/
-[ex1]: #experiment
+[ex1]: /experiments/game-of-life/
 [pjs]: http://prototypejs.org/
 [oaf]: https://github.com/kof/animation-frame
 [jaf]: https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
