@@ -14,5 +14,17 @@
   <div class="content" itemprop="articleBody">
     <%- page.content %>
   </div>
+  <div>
+    <script src="https://paybutton.cash/pre-release/v0.1/js/paybutton.min.js"></script>
+    <button
+      class="pay-button"
+      button-text="Liked this?"
+      button-text-2="Tip €0.50"
+      amount="0.5"
+      amount-type="eur"
+      address="bitcoincash:qz6tuqwe2xz3rvp9h8zlpjg86x4xmy4u5v48ue2k96"
+      success-msg="Thank you!"
+    ></button>
+  </div>
 </article>
 <%- partial('_partial/comments') %>
