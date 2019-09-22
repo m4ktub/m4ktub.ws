@@ -1,5 +1,6 @@
 *~
 .DS_Store
+.directory
 Thumbs.db
 db.json
 *.log
