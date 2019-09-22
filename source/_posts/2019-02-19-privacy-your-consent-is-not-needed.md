@@ -21,7 +21,7 @@ privacy is about consent
 
 It made me think. Yeah, it makes sense. If you don't give your consent to share certain information, and someone does it, then that's a violation of your privacy. And most services ask your consent, through privacy policies or the service's terms and agreements, which seem to recognize that privacy is about consent.
 
-But that wasn't the end of that wandering thought. Something was missing. Consent certainly covers part of it because when you give your consent your already acknowledge that privacy leak. But it doesn't seem general enough as, in my opinion, privacy is a matter or controlling information.
+But that wasn't the end of that wandering thought. Something was missing. Consent certainly covers part of it because when you give your consent your already acknowledge that privacy leak. But it doesn't seem general enough as, in my opinion, privacy is a matter of controlling information.
 
 Information technology
 ----------------------
