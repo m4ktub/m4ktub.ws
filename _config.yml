@@ -108,6 +108,7 @@ highlight:
 
 skip_render:
   # do not process javascript files (#1194)
+  - 'index.js'
   - '**/*.js'
   - 'experiments/**/*'
 
@@ -137,3 +138,14 @@ theme: cactus
 #
 
 disqus_shortname: 
+
+#
+# deployment
+#
+
+deploy:
+  type: sftp
+  host: sftp.dc2.gpaas.net
+  user: "user"   # replace in _deploy.yml
+  pass: password # replace in _deploy.yml
+  remotePath: /lamp0/web/vhosts/default

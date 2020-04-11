@@ -21,6 +21,8 @@
     "npm": "^6.14.4"
   },
   "scripts": {
-    "server": "hexo server"
+    "server": "hexo server",
+    "generate": "hexo clean && hexo generate && cd public && npm i && cd ..",
+    "deploy": "npm run generate && hexo deploy --config _config.yml,_deploy.yml"
   }
 }
