@@ -159,7 +159,7 @@ var results = astar({
     }
 </script>
 
-Try it bellow or the [experiment](#experiment).
+Try it bellow or the [experiment][ex1].
 
 <p>
     N = <input id="valueN" 
