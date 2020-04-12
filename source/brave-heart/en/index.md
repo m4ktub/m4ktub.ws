@@ -6,7 +6,7 @@ description: Brave Heart browser extension
 comments: false
 ---
 
-![](header.jpg)
+![](../header.jpg)
 
 # Brave Heart browser extension
 
