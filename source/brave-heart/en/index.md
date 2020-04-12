@@ -182,4 +182,15 @@ Your IP may be recorded by those websites. Due to the translation of Cash Accoun
 
 There are no frequently asked questions yet.
 
-
+<div>
+    <script src="https://paybutton.cash/pre-release/v0.1/js/paybutton.min.js"></script>
+    <button
+      class="pay-button"
+      button-text="Found this helpful?"
+      button-text-2="Tip €0.50"
+      amount="0.5"
+      amount-type="eur"
+      address="bitcoincash:qz6tuqwe2xz3rvp9h8zlpjg86x4xmy4u5v48ue2k96"
+      success-msg="Thank you!"
+    ></button>
+  </div>
