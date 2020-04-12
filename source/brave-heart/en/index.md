@@ -84,7 +84,7 @@ In the popup, when you hover each entry a couple of actions are shown.
 
 ### Settings
 
-<img src="action-settings.png" style="display: inline; height: 16px;"> You can access the extension options through the settings icon shown in the popup's header. As for any other extension, you can also right click the extension button and choose "Options" fom the menu. The options are grouped together into sections.
+<img src="action-settings.png" style="display: inline; height: 16px;"> You can access the extension options through the settings icon shown in the popup's header. As for any other extension, you can also right click the extension button and choose "Options" from the menu. The options are grouped together into sections.
 
 **Contribute**: Choose the currency to use when presenting fiat values. This is particularly important when figuring amount of Bitcoin Cash to pay.
 
@@ -170,13 +170,13 @@ Add your Bitcoin Cash address or Cash Account to your profile description. You c
 
 The extension will be active on every site you visit. No personal information or information from you browser or device is ever collected or transmitted. The only information collected by the extension are the page's title, the page's URL, and one Bitcoin Cash address associated with the page. When visiting websites the extension may perform additional requests to retrieve account information or the Bitcoin Cash address for the content's author. All that information, together with the time spent on the page, is stored in the browser's local storage which may be accessible to other applications installed in your device. 
 
-The extension uses the following websites:
+The extension uses the following services:
 
   * https://rest.bitcoin.com
   * https://index-api.bitcoin.com
   * https://bitsocket.bch.sx
 
-You IP may be recorded by those websites. Due to the translation of Cash Accounts to Bitcoin Cash addreses, it may be possible for Bitcoin.com keep track of the authors you consume the most. Besides this information, only public information (eg. Bitcoin Cash addresses and transactions) are ever transmitted and it's important that you ensure the privacy of the generated change.
+Your IP may be recorded by those websites. Due to the translation of Cash Accounts to Bitcoin Cash addreses, it may be possible for Bitcoin.com keep track of the authors you consume the most. Besides this information, only public information (eg. Bitcoin Cash addresses and transactions) are ever transmitted and it's important that you ensure the privacy of the generated change.
 
 ## FAQ
 
