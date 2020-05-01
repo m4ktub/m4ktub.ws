@@ -1,6 +1,6 @@
 ---
 title: The Bitcoin Cash Room
-categories: ideas
+categories: projects
 tags:
   - bitcoin
   - scuttlebutt
