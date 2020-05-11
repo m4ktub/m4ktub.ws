@@ -1,7 +1,7 @@
 ---
 title: Brave Hearth
 date: 2020-04-02
-updated: 2020-04-02
+updated: 2020-05-11
 description: Brave Heart browser extension
 comments: false
 ---
