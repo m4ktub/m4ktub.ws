@@ -30,7 +30,7 @@ comments: false
   * [Privacy](#Privacy)
   * [FAQ](#FAQ)
 
-A chrome extension to directly reward web producers with no trusted intermediaries.
+A browser extension to directly reward web producers with no trusted intermediaries.
 
 The extension monitors the pages you're visiting and looks for Bitcoin Cash addresses in them. The goal is to provide a summary of the pages, channels, or users from which you consume the most content and allow you to contribute to them proportionally in an easy way. This is similar to (and inspired by) Brave Rewards but with the difference that:
 
@@ -48,6 +48,11 @@ You can get it from the corresponding web stores.
     <td>
       <a href="https://chrome.google.com/webstore/detail/brave-heart/pilfdbhihpfofbaeebffenllffmjnpei">
         <img src="ChromeWebStore_BadgeWBorder_v2_206x58.png">
+      </a>
+    </td>
+    <td>
+      <a href="https://addons.mozilla.org/en-US/firefox/addon/brave-heart/">
+        <img src="firefox-addon.png" width="206px">
       </a>
     </td>
   </tr>
