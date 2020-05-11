@@ -175,8 +175,9 @@ The extension uses the following services:
   * https://rest.bitcoin.com
   * https://index-api.bitcoin.com
   * https://bitsocket.bch.sx
+  * https://www.google.com/s2/favicons (Firefox only)
 
-Your IP may be recorded by those websites. Due to the translation of Cash Accounts to Bitcoin Cash addreses, it may be possible for Bitcoin.com keep track of the authors you consume the most. Besides this information, only public information (eg. Bitcoin Cash addresses and transactions) are ever transmitted and it's important that you ensure the privacy of the generated change.
+Your IP may be recorded by those websites. Due to the translation of Cash Accounts to Bitcoin Cash addresses, it may be possible for Bitcoin.com keep track of the authors you consume the most. Besides this information, only public information (eg. Bitcoin Cash addresses and transactions) are ever transmitted and it's important that you ensure the privacy of the generated change.
 
 ## FAQ
 
