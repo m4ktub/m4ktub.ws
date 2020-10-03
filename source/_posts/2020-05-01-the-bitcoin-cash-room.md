@@ -10,7 +10,13 @@ tags:
 thumbnail:
 s: the-bitcoin-cash-room
 date: 2020-05-01Z
+updated: 2020-10-03Z
 ---
+
+**2020-06-29**
+**WARNING**: The SSB Bitcoin Cash Room was decommissioned due to lack of participation from the community. Being decentralized, anyone using SSB is still accessible through other rooms, pubs, or directly. If interested, just ask around.
+
+<hr>
 
 Who wants to try (yet) another social network?
 
