@@ -1,6 +1,6 @@
 ---
 title: The Mythical Community and the Permissionless of Bitcoin Cash
-categories: ideads
+categories: ideas
 tags:
   - bitcoin
   - community
