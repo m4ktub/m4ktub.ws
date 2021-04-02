@@ -10,6 +10,7 @@ tags:
 thumbnail:
 s: ownership-vs-possession
 date: 2019-01-19Z
+updated: 2020-04-02Z
 ---
 
 A few weeks ago I came across the following Tweet:
@@ -28,7 +29,7 @@ Bitcoin Cash works like that and even makes intent clearer. Contrary to intuitio
 
 If Bitcoin Cash was perfectly fungible, that is, if no one could know where did the coins come from, then no one would worry about these things. But coins can be tracked and sending someone a small amount, just to then track their expenses, is a real possibility. People can look for these cases (some actually do) and donate those coins to miners. It's the equivalent of receiving money in your mailbox and handing it over to the police. The price of a little more privacy…
 
-Obviously laws are different everywhere. Apparently [moose cannot be thrown from a plane][1] and I've heard someone that some dictator or emperor ordered the Sun to rise at a certain time. It's possible to put anything into law. But let's be real and be critical. Laws are always behind the times and some things just don’t make sense.
+Obviously laws are different everywhere. Apparently [moose cannot be thrown from a plane][1] and I've heard from someone that some dictator or emperor ordered the Sun to rise at a certain time. It's possible to put anything into law. But let's be real and be critical. Laws are always behind the times and some things just don’t make sense.
 
 __  
 Disclaimer: this post was written very high on [mount stupid][2].
