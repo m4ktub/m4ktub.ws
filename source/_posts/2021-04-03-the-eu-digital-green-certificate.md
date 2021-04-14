@@ -10,6 +10,7 @@ tags:
 thumbnail:
 s: the-eu-digital-green-certificate
 date: 2021-04-03Z
+updated: 2021-04-14Z
 ---
 
 Excelentíssimo Senhor Primeiro Ministro\
