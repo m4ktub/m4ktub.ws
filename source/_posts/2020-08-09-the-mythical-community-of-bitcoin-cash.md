@@ -10,6 +10,7 @@ tags:
 thumbnail:
 s: the-mythical-community-of-bitcoin-cash
 date: 2020-09-09Z
+update: 2021-07-01Z
 ---
 
 This is the Marrakech market in the morning, with a close up of the underlying technology that powers it, Jemma el-Fnaa.
@@ -18,7 +19,7 @@ This is the Marrakech market in the morning, with a close up of the underlying t
 
 This, however, is the Marrakech market in the evening. Exactly the same underlying technology but filled with people coming together to exchange goods and services. Even ignoring the warm evening tones, it's evident there's a much more vibrant and rich atmosphere. It's full of life.
 
-{% asset_img jemaa-el-fnaa1.jpg "Jemaa el-Fnaa in the evening" %}
+{% asset_img jemaa-el-fnaa2.jpg "Jemaa el-Fnaa in the evening" %}
 
 So what exactly is the Marrakech market? It certainly exists, since it's internationally famous, described in several guides, and I'm writing about it. But it's not only the public square. Nor is it a specific group of people, since those change every day. The market is all of those things together, a pattern of behaviors around Jemaa el-Fnaa that changes constantly but that still keeps some recognizable purpose and consistency over time. Could the Marrakech market be moved to another space outside of the medina? Hardly. It's certainly possible to move all the people, tents, and behaviors to that new place. People may even call it the Marrakech market but there would always be a new and old market. Jemaa el-Fnaa, inert as it is without the people, is an essential part of the market's identity.
 
