@@ -1,0 +1,9 @@
+All files in this folder are external and created in other projects.
+
+heap.js 
+=======
+
+Obtained from the link bellow after a simple "javascript min heap" search. The
+license is a something something PSF which I don't quite get.
+
+https://github.com/qiao/heap.js/blob/3b78607fc7486cf1cebda6c8a9587883c66f198d/lib/heap.js

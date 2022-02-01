@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="The Conway’s Game of Life is a simple cellular automaton that has always captured  my attention. So, as a first experiment I’m doing an HTML and Javascript implementation of the game. There are severa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Game of Life">
+<meta property="og:url" content="http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/index.html">
+<meta property="og:site_name" content="m4ktub">
+<meta property="og:description" content="The Conway’s Game of Life is a simple cellular automaton that has always captured  my attention. So, as a first experiment I’m doing an HTML and Javascript implementation of the game. There are severa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://m4ktub.ws/images/gol-glider.png">
+<meta property="article:published_time" content="2014-08-12T01:00:00.000Z">
+<meta property="article:modified_time" content="2019-11-13T12:14:29.368Z">
+<meta property="article:author" content="Cláudio Gil">
+<meta property="article:tag" content="cellular">
+<meta property="article:tag" content="automaton">
+<meta property="article:tag" content="gol">
+<meta property="article:tag" content="canvas">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://m4ktub.ws/images/gol-glider.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=16">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=192" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=180">
+          
+        
+    
+    <!-- title -->
+    <title>Game of Life</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="m4ktub" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/posts/2014/08/29/conway-hates-game-of-life/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&text=Game of Life" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&is_video=false&description=Game of Life" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Game of Life&body=Check out this article: http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&name=Game of Life&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#External-Frameworks"><span class="toc-number">1.</span> <span class="toc-text">External Frameworks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Animation-Loop"><span class="toc-number">2.</span> <span class="toc-text">Animation Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cellular-automaton"><span class="toc-number">3.</span> <span class="toc-text">Cellular automaton</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-algorithm"><span class="toc-number">4.</span> <span class="toc-text">The algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Putting-it-all-together"><span class="toc-number">5.</span> <span class="toc-text">Putting it all together</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Game of Life
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">m4ktub</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2014-08-12T01:00:00.000Z" itemprop="datePublished">2014-08-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/experiments/">experiments</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/automaton/" rel="tag">automaton</a>, <a class="tag-link" href="/tags/canvas/" rel="tag">canvas</a>, <a class="tag-link" href="/tags/cellular/" rel="tag">cellular</a>, <a class="tag-link" href="/tags/gol/" rel="tag">gol</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>The <a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank" rel="noopener">Conway’s Game of Life</a> is a simple cellular automaton that has always
+captured  my attention. So, as a first experiment I’m doing an HTML and
+Javascript implementation of the game. There are several implementations out
+there. A simple Google search shows me <a href="http://xefer.com/gameoflife" target="_blank" rel="noopener">1</a>, <a href="http://www.julianpulgarin.com/canvaslife/" target="_blank" rel="noopener">2</a>, and <a href="http://pmav.eu/stuff/javascript-game-of-life-v3.1.1/" target="_blank" rel="noopener">3</a>. The
+first two are simple experiments, and the last seems interested in
+performance. With <a href="/experiments/game-of-life/">this experiment</a> I use simple JavaScript and the HTML 5
+Canvas primitives to provide a Game Of Life implementation with basic features
+like: infinite canvas, pan, zoom, and some sample patterns to load and get
+going.</p>
+<p>My main interest is to use the canvas, to play around with it’s API, and to make
+things reusable for the next experiments. For example, I would like to reuse all
+the drag, zoom and painting logic when doing another celular automaton. I think
+the reusability can be seen in the setup above bellow.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> loop = <span class="keyword">new</span> AnimationLoop(&#123;</span><br><span class="line">  ...</span><br><span class="line">  game: <span class="keyword">new</span> CellAutomaton(&#123;</span><br><span class="line">    scale: <span class="number">5.0</span>,</span><br><span class="line">    canvas: canvas,</span><br><span class="line">    algorithm: <span class="keyword">new</span> GameOfLife(&#123;</span><br><span class="line">      pattern: pattern</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;),</span><br><span class="line">  ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>It’s a composition of:</p>
+<ul>
+<li><strong>an animation loop</strong> to provide the notion of animation, starting, stoping,
+and frame by frame iteration.</li>
+<li>a <strong>cellular automaton</strong> to integrate the visible aspect of an automaton
+(drawing, draging, zooming) with the invisible aspect (the algorithm).</li>
+<li>and <strong>game of life</strong> itself that takes an initial pattern and calculates
+each successive generation.</li>
+</ul>
+<p>Those partes where implemented from scratch but a few external dependencies
+where used to complete the experiment.</p>
+<h2 id="External-Frameworks"><a href="#External-Frameworks" class="headerlink" title="External Frameworks"></a>External Frameworks</h2><p>This first thing I’ve evaluated was whether I should use a Javascript framework
+or not, to provide <em>advanced</em> features. I did not have a particular criteria but
+a class system and some HTML utilities seemed desirable. MooTools and Dojo are
+modularized and provide a lot of features. Nevertheless, for such a simple thing
+it seems too be imposing too much on everything that comes next and may want to
+reuse something. An exception was made for <a href="http://prototypejs.org/" target="_blank" rel="noopener">Prototype JS</a> which basically
+provides some of the primitives Javascript should have and a compatibility layer
+for the HTML event system. It is also relatively easy to remove if needed.</p>
+<p>Besides Prototype, to provide a consistent interface in this time of turbulence,
+I’ve also used <a href="https://github.com/kof/animation-frame" target="_blank" rel="noopener">Oleg’s Animation Frame</a>. If the browser provides
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame" target="_blank" rel="noopener">animation frames</a> natively it is not needed and it does little (delegating
+to the browser unless a specific frame rate is asked).</p>
+<h2 id="Animation-Loop"><a href="#Animation-Loop" class="headerlink" title="Animation Loop"></a>Animation Loop</h2><p>The animation loop has the responsability of driving the game forward frame by
+frame or step by step. But, in the tradicional <em>input-update-render</em> game loop
+this object only handles the update part. This means the input processing and
+rendering is left for the game object that is passed to the loop.</p>
+<p>Since the animation loop only deals with the timing of steps and the concept of
+animation it has no reference of a canvas. It simply supports:</p>
+<ul>
+<li>control buttons,</li>
+<li>animation hooks that are called before or after each step,</li>
+<li>and a game object to do the rest.</li>
+</ul>
+<p>First the animation frames support is ensured by activating Oleg’s shim. This is
+done outside of the animation loop because the browser may already support it
+well enough and it quickly becomes and unecessary dependency.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// provide consistent animation frames</span></span><br><span class="line">AnimationFrame.shim();</span><br></pre></td></tr></table></figure>
+
+<p>Within the animation loop, the initialization prepares all the hooks. The game
+step and reset functions are also considered hooks which allows a page to
+decorate those game functions without modifying the game.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> config = <span class="keyword">this</span>.config = &#123;</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  step: options.step || game.step || Fn.empty,</span><br><span class="line">  reset: options.reset || game.reset || Fn.empty,</span><br><span class="line"></span><br><span class="line">  beforeStart: options.beforeStart || Fn.empty,</span><br><span class="line">  beforeStep: options.beforeStep || Fn.empty,</span><br><span class="line">  afterStep: options.afterStep || Fn.empty,</span><br><span class="line">  afterStop: options.afterStop || Fn.empty,</span><br><span class="line">  afterReset: options.afterReset || Fn.empty</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The animation loop provides four main functions <code>start</code>, <code>stop</code>, <code>reset</code>, and
+<code>reset</code>. For each of this a control button (or any clicable thing) is permited
+as a option. Since each controls is optional the initialization is done in three
+steps. First the control options are defined unitialized, in the configuration,
+to enumerate the options.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> config = <span class="keyword">this</span>.config = &#123;</span><br><span class="line">  controls: &#123;</span><br><span class="line">    start: <span class="literal">undefined</span>,</span><br><span class="line">    stop: <span class="literal">undefined</span>,</span><br><span class="line">    step: <span class="literal">undefined</span>,</span><br><span class="line">    reset: <span class="literal">undefined</span></span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Afterwards, for each control configuration, the corresponding control is
+initialized from the given options. If specified then the configuration is set
+with the corresponding element.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> config.controls) &#123;</span><br><span class="line">  <span class="keyword">var</span> control = Fn.oget(options.controls, name);</span><br><span class="line">  <span class="keyword">if</span> (control) &#123;</span><br><span class="line">    config.controls[name] = $(control);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The final step is to bind each click in the control with one of the animation
+loop’s public functions. The controls in the configuration and the public
+functions match and it’s easy to keep it that way so the type checking, for the
+public function, is more of an assert that confirms the value is a valid event
+handler to the <code>observe</code> function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> config.controls) &#123; </span><br><span class="line">  <span class="keyword">var</span> control = config.controls[name];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (control &amp;&amp; <span class="keyword">typeof</span> <span class="keyword">this</span>[name] == <span class="string">"function"</span>) &#123;</span><br><span class="line">    $(control).observe(<span class="string">'click'</span>, <span class="keyword">this</span>[name]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Each public function has the same structure. It considers if the animation is
+running or paused, calls the internal function and updates the control
+visibility. For example, the <code>start</code> function is show below.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.start = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  Fn.when(!state.running, start);</span><br><span class="line">  updateControls();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The controls update is relatively simple. If the game is running then only the
+<em>stop</em> button is enabled. If the game is stopped then the other buttons are
+enabled. The internal function updates animation loop, calls the appropriate
+hooks, and updates the internal state. In the case of the <code>start</code> function,
+shown bellow, a new animation is scheduled and the state is set to <em>running</em>
+after calling the <code>beforeStart</code> hook.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> animation = state.animation;</span><br><span class="line">  animation.requestId = requestAnimationFrame(animate);</span><br><span class="line">  config.beforeStart(self);</span><br><span class="line">  state.running = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We can see that the <code>animation</code> function is the <em>core</em> of the animation loop. It
+keeps the loop alive by continuously requesting another animation frame and
+performs one step. As long as each step takes less than 16ms to complete (at
+60 fps) then the animation loop is fluid. But if computing the next state and
+drawing the canvas takes longer, it starts to slow down.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">animate</span>(<span class="params">time</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> animation = state.animation;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!animation.start) &#123;</span><br><span class="line">    animation.start = time;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  animation.time = time; </span><br><span class="line">  animation.requestId = requestAnimationFrame(animate);</span><br><span class="line"></span><br><span class="line">  step();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The <code>step</code> function does not consider the animation. It simply calls any before
+and after hooks, updates the frame count and delegates to the game object (or
+any step hook that was provided). This allows the step function to be the same
+function called when the user presses the configured step button, when the game
+is not running.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">step</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  config.beforeStep(self);</span><br><span class="line">  state.frame += <span class="number">1</span>;</span><br><span class="line">  config.step(self);</span><br><span class="line">  config.afterStep(self);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The other public functions are similar to this case. The <code>reset</code> function is
+similar to the <code>step</code> in the aspect that it does not consider the animation. And
+the <code>stop</code> uses <code>cancelAnimationFrame</code>, to cancel any pending request, and
+resets the internal state.</p>
+<h2 id="Cellular-automaton"><a href="#Cellular-automaton" class="headerlink" title="Cellular automaton"></a>Cellular automaton</h2><p>The cellular automaton uses a canvas to provide a visualization, for the Game of
+Life algorithm, and to control the interactivity with the user. The colors for
+each pixel are actually calculated by the algorithm but the cellular automaton
+object controls scalling and other cell-to-pixel mappings and decorations.</p>
+<p>First the cellular automaton initializes the canvas to provide the 2D drawing
+context.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> canvas = $(options.canvas);</span><br><span class="line"><span class="keyword">var</span> ctx = canvas.getContext(<span class="string">"2d"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>The initial configuration is very simple and presently only captures the initial
+canvas, algorithm, and provides defaults for the initial scale and the zooming
+limits.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> config = <span class="keyword">this</span>.config = &#123;</span><br><span class="line">  canvas: canvas,</span><br><span class="line">  automaton: automaton,</span><br><span class="line"></span><br><span class="line">  scale: <span class="number">1.0</span>,</span><br><span class="line">  zoom: &#123;</span><br><span class="line">    inc: <span class="number">1.1</span>,</span><br><span class="line">    dec: <span class="number">0.9</span>,</span><br><span class="line">    max: <span class="number">20.0</span>,</span><br><span class="line">    min: <span class="number">0.2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The initial state specifies the current scale, the cell position of the top left
+corner of the canvas, and mouse related information which is starts
+uninitialized. Initially we also assume a scale of 1 and that the top-left
+position is in <code>(0.0, 0.0)</code>. The adjustements to scale and top-left position are
+made when <code>reset</code> is called. That will be shown later. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> state = <span class="keyword">this</span>.state = &#123;</span><br><span class="line">  scale: <span class="number">1.0</span>,</span><br><span class="line">  top: <span class="number">0.0</span>,</span><br><span class="line">  left: <span class="number">0.0</span>,</span><br><span class="line"></span><br><span class="line">  mouse: &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The scale represents the number of pixels that correspond to a single cell. So a
+scale of 5.0 means one cell is represented by 5 pixels, and a scale
+of 0.5 means 1 pixel represents two cells. In this last case the algorithm is
+responsible for producing a combined color. The top left indicates the cell
+coordinate of the top left corner of the canvas. It can be a decimal value
+like 0.5, specially if the scale is bigger than 1.0 because we can still drag
+the canvas pixel by pixel.</p>
+<p>The scale and top-left positions are changed by zooming (by using the
+mouse-wheel) and panning (by dragging), respectivly. This values impact on the
+drawing of the canvas. At the start of every redraw the vancas is cleared. The
+algorithm can provide a background. This allows the algorithm to provide colors
+for alive cells.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clear</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ctx.fillStyle = algorithm.style.background || <span class="string">"#FFFFFF"</span>;</span><br><span class="line">  ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, canvas.width, canvas.height);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Cells are drawn as rectangles of the color provided by the algorithm. Due to
+scaling, the algorithm may be asked for the color of several cells at once
+(scale &gt; 1). This means a pixel (1x1 rectangle) will have a combined color
+provided by the algorithm. When the scale is between 0 and 1 then the color of a
+single cell is used to fill more than 1 pixel.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">drawCell</span>(<span class="params">x, y, width, height, color</span>) </span>&#123;</span><br><span class="line">  ctx.fillStyle = color;</span><br><span class="line">  ctx.fillRect(x, y, width, height);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>These functions are used in the main draw function as shown bellow, in
+parts. First the canvas is cleared and all constants are defined. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">draw</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// clear everything so we only need to draw the pixels</span></span><br><span class="line">  clear();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// resolutions</span></span><br><span class="line">  <span class="keyword">var</span> ppc = state.scale;     <span class="comment">// pixels per cell (float)</span></span><br><span class="line">  <span class="keyword">var</span> cpp = <span class="number">1</span> / state.scale; <span class="comment">// cells per pixel (float)</span></span><br><span class="line">        </span><br><span class="line">  <span class="comment">// cell position in the top left corner</span></span><br><span class="line">  <span class="keyword">var</span> cx0 = state.left;</span><br><span class="line">  <span class="keyword">var</span> cy0 = state.top;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// offset for the top left pixel of the cell in the top left corner</span></span><br><span class="line">  <span class="keyword">var</span> px0 = ppc * (<span class="built_in">Math</span>.floor(cx0) - cx0);</span><br><span class="line">  <span class="keyword">var</span> py0 = ppc * (<span class="built_in">Math</span>.floor(cy0) - cy0);</span><br></pre></td></tr></table></figure>
+
+<p>Interesting constants are:</p>
+<ul>
+<li><strong>ppc</strong>: The number of pixels per cell. The same as the scale.</li>
+<li><strong>cpp</strong>: The number of cells per pixel. The inverse of the scale.</li>
+<li><strong>cx0</strong> and <strong>cy0</strong>: The position of the cell visible in the top left corner
+of the canvas. This position may be something like (1.5, 2.2), meaning the
+cell (1, 2) for the algorithm.</li>
+<li><strong>px0</strong> and <strong>py0</strong>: The position of the pixel corresponding to the top left
+corner of the cell in the top left corner of the canvas. This is a mouth
+full best represented by the following image.</li>
+</ul>
+<p><img src="/images/gol-topleft-points.png" alt="" title="Diagram of top-left points.">
+{: .center}</p>
+<p>In the image we have point <code>(px0, py0) = (-2.0, -2.0)</code>. The point <code>(cx0, cy0)</code>
+has two type of coordinates. The coordinates in the canvas, in pixels, are not
+interesting because they are always <code>(0, 0)</code> and we need to draw a rectangle
+starting at <code>(px0, py0)</code> with a side of <code>pcc</code> length. That’s why the top-left
+position in kept in cell coordinates and the <code>pcc</code> is used to calculate the
+position <code>(px0, py0)</code>.</p>
+<p>With this starting values with iterate over the canvas in <code>ppc</code> increments and
+over the cells in <code>cpp</code> increments. This values are obviously limited to a
+minimum of 1, because we move at least 1 pixel and 1 cell. This iteration is
+limited by the canvas width or height. This means we assume the cell coordinate
+space is infinite and the algorithm must be prepared to accept requests for any
+coordinate.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get color fox each pixel</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> pyf = py0, cyf = cy0; </span><br><span class="line">     pyf &lt; canvas.height; </span><br><span class="line">     pyf += <span class="built_in">Math</span>.max(<span class="number">1</span>, ppc), cyf += <span class="built_in">Math</span>.max(<span class="number">1</span>, cpp)) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> pyi = <span class="built_in">Math</span>.floor(pyf);</span><br><span class="line">    <span class="keyword">var</span> cyi = <span class="built_in">Math</span>.floor(cyf);</span><br><span class="line">    <span class="keyword">var</span> cydelta = <span class="built_in">Math</span>.max(<span class="number">1</span>, <span class="built_in">Math</span>.floor(cyf + cpp) - cyi);</span><br><span class="line">    <span class="keyword">var</span> pydelta = <span class="built_in">Math</span>.max(<span class="number">1</span>, <span class="built_in">Math</span>.floor(pyf + ppc) - pyi);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> pxf = px0, cxf = cx0; </span><br><span class="line">         pxf &lt; canvas.width; </span><br><span class="line">         pxf += <span class="built_in">Math</span>.max(<span class="number">1</span>, ppc), cxf += <span class="built_in">Math</span>.max(<span class="number">1</span>, cpp)) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> pxi = <span class="built_in">Math</span>.floor(pxf);</span><br><span class="line">        <span class="keyword">var</span> cxi = <span class="built_in">Math</span>.floor(cxf);</span><br><span class="line">        <span class="keyword">var</span> pxdelta = <span class="built_in">Math</span>.max(<span class="number">1</span>, <span class="built_in">Math</span>.floor(pxf + ppc) - pxi);</span><br><span class="line">        <span class="keyword">var</span> cxdelta = <span class="built_in">Math</span>.max(<span class="number">1</span>, <span class="built_in">Math</span>.floor(cxf + cpp) - cxi);</span><br><span class="line"></span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The intermediary values calculated in each iteration are the integers:</p>
+<ul>
+<li><strong>pxi</strong> and <strong>pyi</strong>: The current position in pixels. A square will be drawn
+in the canvas starting at that position.</li>
+<li><strong>cxi</strong> and <strong>cyi</strong>: The current cell position. The cell at that position
+will be considered.</li>
+<li><strong>pxdelta</strong> and <strong>pydelta</strong>: The width and height of the square being drawn
+in the canvas.</li>
+<li><strong>cxdelta</strong> and <strong>cydelta</strong>: The horizontal and vertical number of cells,
+starting at <em>cxi</em> and <em>cyi</em>, for which a color will be asked.</li>
+</ul>
+<p>Iterating over the floating values and then taking the floor of the value allows
+for a stable and smoother step, specially when we introduce dragging and decimal
+values for <code>(cx0, cy0)</code>. When we pass, for example, from the cell position
+<code>(0.9, 0.9)</code> to <code>(1.0, 1.0)</code> then <code>(px0, py0)</code> jumps from a negative value to
+<code>(0.0, 0.0)</code>. In the same way, with a <code>ppc</code> of 1.8, for example, we sometimes
+jump in increments of 1 and other times have and increment of 2. That increment
+size also defines the pixel and cell deltas used to retrive the color and paint
+the result.</p>
+<p>The main part of the drawing algorithm is conceptually very simple. Ask the
+algorithm for the color of a bunch of cells and, if there is a color for those
+cells paint a square of the appropriate size. If the scale is bigger than 1.0
+then, for each cell, we draw a big square. If the scale is less than 1.0 then we
+get the color of several cells and draw a single pixel. Obvisouly, at 1.0 we
+have deltas of 1 and a match between pixels and cells.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> color = algorithm.getColor(cxi, cyi, cxdelta, cydelta);</span><br><span class="line"><span class="keyword">if</span> (color) &#123;</span><br><span class="line">  drawCell(pxi, pyi, pxdelta, pydelta, color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The <code>draw</code> function is used from the automaton public <code>step</code> and <code>reset</code>
+functions. These provide the connection with the game loop: for each frame there
+is a step in the algorithm and a redraw. In the <code>reset</code>, the positions and
+scaling are reset before reseting the algorithm and also redrawing.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.step = <span class="function"><span class="keyword">function</span>(<span class="params">loop</span>) </span>&#123;</span><br><span class="line">  algorithm.step();</span><br><span class="line">  draw();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.reset = <span class="function"><span class="keyword">function</span>(<span class="params">loop</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// set the initial top-left position based on the algorithm center</span></span><br><span class="line">  <span class="keyword">var</span> center = algorithm.center;</span><br><span class="line"></span><br><span class="line">  state.top = center.y - <span class="built_in">Math</span>.floor(canvas.height / <span class="number">2</span>);</span><br><span class="line">  state.left = center.x - <span class="built_in">Math</span>.floor(canvas.width / <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// apply the initial scale which might move the top-left</span></span><br><span class="line">  applyScale(</span><br><span class="line">    config.scale, </span><br><span class="line">    <span class="built_in">Math</span>.floor(canvas.width / <span class="number">2</span>), </span><br><span class="line">    <span class="built_in">Math</span>.floor(canvas.height / <span class="number">2</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// reset algorithm</span></span><br><span class="line">  algorithm.reset();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// and redraw</span></span><br><span class="line">  draw();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The <code>applyScale</code> function sets the current scale but also updates the top-left
+corner. This allows for a <em>centered</em> scaling, that is, to keep a certain cell
+under the same pixel of the canvas. When using an initial scale different than
+one this moves the top-left corner further way or closer to the center indicated
+by the algorithm.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyScale</span>(<span class="params">newscale, x, y</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// new and old cpp</span></span><br><span class="line">  <span class="keyword">var</span> oldcpp = <span class="number">1</span> / state.scale;</span><br><span class="line">  <span class="keyword">var</span> newcpp = <span class="number">1</span> / newscale;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// calculate cell offset</span></span><br><span class="line">  <span class="keyword">var</span> cdx = x * newcpp - x * oldcpp;</span><br><span class="line">  <span class="keyword">var</span> cdy = y * newcpp - y * oldcpp;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// apply scale and offsets</span></span><br><span class="line">  state.scale = newscale;</span><br><span class="line">  state.left -= cdx;</span><br><span class="line">  state.top -= cdy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The function shown above, updates the top-left corner by converting a pixel
+position, in the canvas, to a cell position and then comparing that position,
+before and after scalling, to determine an offset. Using a pixel position for
+the center of the scaling is particularly useful when performing zooming with
+the mouse wheel as will be shown later.</p>
+<p>Having all the main functions ready, all we need now is a way to provide
+interactivity and scroll the position of the top-left corner and the
+scaling. That is done by monitoring mouse events in on the canvas. Dragging will
+translate the top-lef position. The mouse wheel, in turn, changes the scale.</p>
+<p>The events that are simple to handle are the <code>mousedown</code>, <code>mouseup</code>, and
+<code>mouseout</code>. When the mouse is down we store the mouse position. Whenever the
+mouse is up or leaves the canvas we disable the drag operation. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$(canvas).observe(<span class="string">'mousedown'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!event.isLeftClick()) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  drag.active = <span class="literal">true</span>;</span><br><span class="line">  drag.x = event.pointerX();</span><br><span class="line">  drag.y = event.pointerY();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$(canvas).observe(<span class="string">'mouseup'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  drag.active = <span class="literal">false</span>;</span><br><span class="line">  drag.x = <span class="literal">undefined</span>;</span><br><span class="line">  drag.y = <span class="literal">undefined</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$(canvas).observe(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  drag.active = <span class="literal">false</span>;</span><br><span class="line">  drag.x = <span class="literal">undefined</span>;</span><br><span class="line">  drag.y = <span class="literal">undefined</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Whenever the drag is active, the <code>mousemove</code> event is used to translate the
+top-left position. Since the top-left position is a cell position we need to
+convert the mouse position into a cell position by using the current
+scale. Regardless of drag being inactive, we always store the mouse position
+because that is helpful for zooming.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$(canvas).observe(<span class="string">'mousemove'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// save position whenever mouse moves around</span></span><br><span class="line">  <span class="keyword">var</span> px = mouse.x = event.pointerX();</span><br><span class="line">  <span class="keyword">var</span> py = mouse.y = event.pointerY();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// avoid doing anything else if drag is not active</span></span><br><span class="line">  <span class="keyword">if</span> (!drag.active) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// calculate drag in pixels</span></span><br><span class="line">  <span class="keyword">var</span> pdx = px - drag.x;</span><br><span class="line">  <span class="keyword">var</span> pdy = py - drag.y;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// save current position</span></span><br><span class="line">  drag.x = px;</span><br><span class="line">  drag.y = py;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// pixels to cells</span></span><br><span class="line">  <span class="keyword">var</span> cpp = <span class="number">1</span> / state.scale; <span class="comment">// cells per pixel (float)</span></span><br><span class="line">  <span class="keyword">var</span> cdx = pdx * cpp;</span><br><span class="line">  <span class="keyword">var</span> cdy = pdy * cpp;</span><br><span class="line">        </span><br><span class="line">  <span class="comment">// translate view</span></span><br><span class="line">  state.left -= cdx;</span><br><span class="line">  state.top -= cdy;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// draw</span></span><br><span class="line">  draw();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Whenever there is a <code>mousewheel</code> event, the direction of the mouse wheel is used
+to zoom in or out. Zooming corresponds mainly to a change in the used scale, so
+if we zoom in we are increasing the scale, that is, the number of pixels used
+for a single cell and making cells bigger in the canvas.</p>
+<p>Zooming is limited to an interval, to keep cells perceptible and visible, and is
+centered on the mouse position. The position saved, when the mouse moves over
+the canvas, is used as the center point of the zoom, that is, if, for example,
+you place the mouse cursor in the middle of a cell and zoom in then the cursor
+remains in the middle of that cell. This is handled by the <code>applyScale</code>
+function, shown before, after converting the mouse global coordinate into a
+canvas coordinate, in pixels.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$(canvas).observe(<span class="string">'mousewheel'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// stop page from scrolling</span></span><br><span class="line">  Event.stop(event);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// choose factor according to wheel direction</span></span><br><span class="line">  <span class="keyword">var</span> zoomfactor = event.wheelDelta &gt; <span class="number">0</span> </span><br><span class="line">    ? config.zoom.inc</span><br><span class="line">    : config.zoom.dec;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// new scale and conversion factors</span></span><br><span class="line">  <span class="keyword">var</span> newscale = Fn.limitTo(config.zoom.min, </span><br><span class="line">                            config.zoom.max, </span><br><span class="line">                            state.scale * zoomfactor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// find relative px and py</span></span><br><span class="line">  <span class="keyword">var</span> offset = Fn.getOffset(canvas);</span><br><span class="line">  <span class="keyword">var</span> px = mouse.x - offset.left;</span><br><span class="line">  <span class="keyword">var</span> py = mouse.y - offset.top;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// apply new scale using mouse position as the center</span></span><br><span class="line">  applyScale(newscale, px, py);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// redraw</span></span><br><span class="line">  draw();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>With this type of drawing and interactivity the algorithm for celular automatas
+can have very distinct behaviors. I could use the same automata logic and
+provide an algorithm for the color deamons celular automata. It’s all up to the
+algorithm which must know how to evolve the pattern in each step and generate a
+color for a bunch of cells.</p>
+<h2 id="The-algorithm"><a href="#The-algorithm" class="headerlink" title="The algorithm"></a>The algorithm</h2><p>The Game Of Life algorithm loads an initial pattern into a current generation
+and, in each step, calculates the next generation from the current. The current
+implementation is very simple and not very performance although it fulfills the
+initial goal of allowing several patterns and provide an infinite space for the
+cells.</p>
+<p>The initial configuration consist only of the starting pattern, that is, the
+pattern that is available immediatly when the game is reset. The algorithm state
+is also simple and contains the current generation and population.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> config = &#123;</span><br><span class="line">  pattern: options.pattern,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> state = <span class="keyword">this</span>.state = &#123;</span><br><span class="line">  population: <span class="number">0</span>,</span><br><span class="line">  generation: <span class="number">0</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The current generation of cells treated as a map between position and cell
+value. The infinite space is provided by infinite number of positions, or
+properties, in the map and the corresponding “alive” or “dead” value. As we use
+standard Javascript objects and their properties to provide the <em>map</em> then the
+initial definition is very minimal.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cells = &#123; &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Each position is encoded to a string to be easily usable as a map property. The
+xy position of a cell is <em>stringified</em> to obtain the cell key – or property
+name – in the object. The following code shows that function and the simple
+conversion used.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCellKey</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"x"</span> + x + <span class="string">"y"</span> + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This function is used in the cell accessor <code>getCell</code>. This function obtains the
+current value of a cell in the current generation. If a value is not defined for
+that position (empty space) then a “dead” value of 0 is assumed.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCell</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> cells.cur[getCellKey(x, y)] || <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>There is also a mutator <code>putCell</code> to change the value of a cell at a given
+position. This mutator accepts a target generation in order to be usable by both
+the evolution logic, that updates the next generation, and the initial loading
+logic, that updates the current generation. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">putCell</span>(<span class="params">target, x, y, alive</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!alive) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  target[getCellKey(x, y)] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">fillNeighbor</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> key = getCellKey(x, y);</span><br><span class="line">    target[key] = target[key] || <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  fillNeighbor(x - <span class="number">1</span>, y - <span class="number">1</span>);</span><br><span class="line">  fillNeighbor(x    , y - <span class="number">1</span>);</span><br><span class="line">  fillNeighbor(x + <span class="number">1</span>, y - <span class="number">1</span>);</span><br><span class="line">  fillNeighbor(x - <span class="number">1</span>, y    );</span><br><span class="line">  fillNeighbor(x + <span class="number">1</span>, y    );</span><br><span class="line">  fillNeighbor(x - <span class="number">1</span>, y + <span class="number">1</span>);</span><br><span class="line">  fillNeighbor(x    , y + <span class="number">1</span>);</span><br><span class="line">  fillNeighbor(x + <span class="number">1</span>, y + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The <code>putCell</code> function also updates neighbor cells with 0, or “dead”, if they
+are undefined. This is done in order to explicitly define the space that needs
+to be considered in each generation. Since cells can only born next to other
+cells, if we define all the neighboring space then we just need to iterate
+through all those positions, in the current generation, and calculate the
+corresponding value for the next generation. If a cell becomes alive then it is
+set as alive, in the next generation, and all it’s negbors are set as dead so
+they are considered next time around. This algorithm is shown in the main
+<code>evolve</code> function shown below.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">evolve</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// clear next</span></span><br><span class="line">  <span class="keyword">var</span> population = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> next = &#123; &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// compute next</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> pos <span class="keyword">in</span> cells) &#123;</span><br><span class="line">    <span class="keyword">var</span> coords = getCellKeyCoords(pos);</span><br><span class="line">    <span class="keyword">var</span> x = coords.x;</span><br><span class="line">    <span class="keyword">var</span> y = coords.y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> cell = getCell(x, y);</span><br><span class="line">    <span class="keyword">var</span> allfield = cell + neighborhood(x, y);</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">switch</span> (allfield) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">        putCell(cells.nxt, x, y, <span class="literal">true</span>);</span><br><span class="line">        population++;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">        putCell(cells.nxt, x, y, cell);</span><br><span class="line">        population += cell ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">        putCell(cells.nxt, x, y, <span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">        </span><br><span class="line">  <span class="comment">// update state</span></span><br><span class="line">  state.population = population;</span><br><span class="line">  state.generation += <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// update cells</span></span><br><span class="line">  cells = next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, first the population count and the next generation is
+reset. Then the algorithm iterates through all the positions of the current
+generation and obtains the corresponding coordinates with the function
+<code>getCellKeyCoords</code>, which provides the inverse of <code>getCellKey</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCellKeyCoords</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> yPos = key.indexOf(<span class="string">'y'</span>);</span><br><span class="line">  <span class="keyword">return</span> &#123; </span><br><span class="line">    x: <span class="built_in">parseInt</span>(key.substring(<span class="number">1</span>, yPos)), </span><br><span class="line">    y: <span class="built_in">parseInt</span>(key.substring(yPos + <span class="number">1</span>))</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>For each position an all-field value is computed. An all-field value if
+basically a sum of the cell and all it’s neighbors. At this point, the “dead”
+value of 0 and “alive” value of 1 become helpful and we just need to add the
+cell’s values. This is done in the <code>neighborhood</code> function shown next.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">neighborhood</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span> +</span><br><span class="line">    getCell(x - <span class="number">1</span>, y - <span class="number">1</span>) +</span><br><span class="line">    getCell(x    , y - <span class="number">1</span>) +</span><br><span class="line">    getCell(x + <span class="number">1</span>, y - <span class="number">1</span>) +</span><br><span class="line">    getCell(x - <span class="number">1</span>, y    ) +</span><br><span class="line">    getCell(x + <span class="number">1</span>, y    ) +</span><br><span class="line">    getCell(x - <span class="number">1</span>, y + <span class="number">1</span>) +</span><br><span class="line">    getCell(x    , y + <span class="number">1</span>) +</span><br><span class="line">    getCell(x + <span class="number">1</span>, y + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This eggocentric way of computing the cell state – as described in Wikipedia –
+allows a more streamlined computation with easy to read cases instead of range
+comparisons with if statements. If the all-field is 3, then either the cell is
+alive and has 2 alive neighbors or is dead and has the required 3 neighbors. In
+any case, the cell is alive in the next generation. If the all-field is 4 then
+cell value keeps the same for the next generation. And in all the other cases
+the cell is dead. At the end of this cyle the next generation is computed and we
+have the resulting population count. So we just need to update the internal
+state and the cells representing the current generation.</p>
+<p>With these function we already have a functioning Game of Life simulation once
+we load a pattern into the current generation. This is done by the public <code>load</code>
+function. Curently no [standard game of life format][ggf] is supported. A new
+one, which is very simple, was invented in a minute:</p>
+<ul>
+<li>Blank lines are ignored.</li>
+<li>Each line with some non-space caracter is considered part of the pattern.</li>
+<li>The pattern may be enclosed between pairs of |.</li>
+<li>The character | is ignored but any other character is an alive cell.</li>
+</ul>
+<p>For example, a blinker can be represented as <code>| *** |</code>, <code>| xxx |</code>, or simply
+<code>ooo</code>. The pattern will be interpreted and and placed in the middle of the
+space. This is done by considering the number of lines and the maximum length of
+all lines.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.load = <span class="function"><span class="keyword">function</span>(<span class="params">pattern</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// save pattern</span></span><br><span class="line">  config.pattern = pattern;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// process lines</span></span><br><span class="line">  <span class="keyword">var</span> lines = $A(pattern.split(<span class="regexp">/\r?\n|\r/</span>))</span><br><span class="line">      .filter(<span class="function"><span class="keyword">function</span>(<span class="params">l</span>) </span>&#123; <span class="keyword">return</span> !l.blank(); &#125;)</span><br><span class="line">      .map(<span class="function"><span class="keyword">function</span> (<span class="params">l</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> l.replace(<span class="regexp">/\s*\|([^\|]*)\|\s*/</span>, <span class="string">"$1"</span>);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// calculate width</span></span><br><span class="line">  <span class="keyword">var</span> maxCols = $A(lines).max(<span class="function"><span class="keyword">function</span>(<span class="params">l</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> l.length;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// top left corner of pattern</span></span><br><span class="line">  <span class="keyword">var</span> top = -<span class="built_in">Math</span>.floor(lines.length / <span class="number">2</span>);</span><br><span class="line">  <span class="keyword">var</span> left = -<span class="built_in">Math</span>.floor(maxCols / <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// clear cells</span></span><br><span class="line">  cells = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// put pattern</span></span><br><span class="line">  state.population = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> dy = <span class="number">0</span>; dy &lt; lines.length; dy++) &#123;</span><br><span class="line">    <span class="keyword">var</span> line = lines[dy];</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> dx = <span class="number">0</span>; dx &lt; line.length; dx++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (line.charAt(dx) != <span class="string">" "</span>) &#123;</span><br><span class="line">        state.population++;</span><br><span class="line">        putCell(cells, left + dx, top + dy, <span class="literal">true</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Having a way of loading a pattern and a function to evolve the pattern into the
+next generation we can provide the public <code>reset</code> and <code>step</code> functions that
+connect the algorithm to the automaton or the game loop.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.reset = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  state.generation = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">this</span>.load(config.pattern);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.step = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  evolve();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>The only thing that is missing is the function <code>getColor</code> that produces a color
+for the cells. This function must be generic and accept any position. It must
+also be able to provide a color for square of cells indicated by the width and
+height. Since we are using black for cells that are alive we must calculate a
+gradient, between black and white, that represents the proportion of alive cells
+and dead cells.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.getColor = <span class="function"><span class="keyword">function</span>(<span class="params">x, y, width, height</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> h = <span class="number">0</span>; h &lt; height; h++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> w = <span class="number">0</span>; w &lt; width; w++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (getCell(x + h, y + h)) &#123;</span><br><span class="line">        count++;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> area = width * height;</span><br><span class="line">  <span class="keyword">var</span> color = <span class="number">255</span> - <span class="built_in">Math</span>.round(<span class="number">255</span> * count / area);</span><br><span class="line">  <span class="keyword">if</span> (count &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"rgb("</span> + color + <span class="string">","</span> + color + <span class="string">","</span> + color + <span class="string">")"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Whenever we only have dead cells then we don’t produce a color and rely on the
+background color. That was specified, together with what we consider the center
+of the space, with the public properties <code>center</code> and <code>style</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.center = &#123;</span><br><span class="line">  x: <span class="number">0</span>,</span><br><span class="line">  y: <span class="number">0</span> </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.style = &#123;</span><br><span class="line">  background: <span class="string">"#fff"</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Putting-it-all-together"><a href="#Putting-it-all-together" class="headerlink" title="Putting it all together"></a>Putting it all together</h2><p>To put it all together, and actually run the first code sample shown, a simple
+HTML page was created. The main element of the page is the HTML canvas. Together
+with the canvas, some information is provided about the current state of the
+algorithm. Currently the number of steps – or generation – and the population
+is shown. There are also some controls to control the animation and choose the
+current pattern.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"instructions"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>You can scrool to zoom and drag to move the pattern around.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"game"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"gol"</span> <span class="attr">width</span>=<span class="string">"400px"</span> <span class="attr">height</span>=<span class="string">"300px"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">table</span> <span class="attr">class</span>=<span class="string">"information"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">th</span> <span class="attr">scope</span>=<span class="string">"row"</span>&gt;</span>Steps:<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"step"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">th</span>&gt;</span>Population:<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"population"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"controls"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"bRun"</span>&gt;</span>Run<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"bPause"</span> <span class="attr">disabled</span>=<span class="string">"disabled"</span>&gt;</span>Pause<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"bStep"</span>&gt;</span>Step<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"bReset"</span>&gt;</span>Reset<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">onchange</span>=<span class="string">"selectPattern(this.value);"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"pat-ggg"</span>&gt;</span>Gosper Glider Gun<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"pat-rpentamino"</span>&gt;</span>R-pentamino<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"pat-diehard"</span>&gt;</span>Diehard<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"pat-acorn"</span>&gt;</span>Acorn<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>All the buttons are controlled by the game loop. When the loops is initialized
+it binds the button <code>click</code> event to the game’s functions. The pattern
+selections uses an helper function to change the pattern and that is shown
+bellow. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectPattern</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  loop.game.algorithm.load($(value).innerHTML);</span><br><span class="line">  loop.reset();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The global object <code>loop</code> is used to reach the algoritm and load the
+pattern. This means that the pattern is the content of an HTML element. For
+example, the Acorn pattern is defined as shown bellow. </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"pat-acorn"</span> <span class="attr">class</span>=<span class="string">"pattern"</span> <span class="attr">title</span>=<span class="string">"Acorn"</span>&gt;</span></span><br><span class="line">  |  x      |</span><br><span class="line">  |    x    |</span><br><span class="line">  | xx  xxx |</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>The other important parts of the page are the game loop’s hooks passed in the
+initialization. These are used to update the game’s information after each step.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> loop = <span class="keyword">new</span> AnimationLoop(&#123;</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  afterStep: <span class="function"><span class="keyword">function</span>(<span class="params">loop</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> state = loop.game.algorithm.state;</span><br><span class="line">    $(<span class="string">'step'</span>).innerHTML = state.generation;</span><br><span class="line">    $(<span class="string">'population'</span>).innerHTML = state.population;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  afterReset: <span class="function"><span class="keyword">function</span>(<span class="params">loop</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> state = loop.game.algorithm.state;</span><br><span class="line">    $(<span class="string">'step'</span>).innerHTML = state.generation;</span><br><span class="line">    $(<span class="string">'population'</span>).innerHTML = state.population;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>With all this setup we just need to put the key in the engine and start
+it. Therefore the last element is the initialization of the loop, automaton, and algorithm by calling the public <code>reset</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loop.reset();</span><br></pre></td></tr></table></figure>
+
+<p>That’s it. Everything else are smaller details so you can check the entire
+source at <a href="https://github.com/m4ktub/m4ktub.ws/tree/master/experiments/game-of-life" target="_blank" rel="noopener">GitHub</a> and try <a href="/experiments/game-of-life/">the live experiment</a>. Have fun!</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#External-Frameworks"><span class="toc-number">1.</span> <span class="toc-text">External Frameworks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Animation-Loop"><span class="toc-number">2.</span> <span class="toc-text">Animation Loop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cellular-automaton"><span class="toc-number">3.</span> <span class="toc-text">Cellular automaton</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-algorithm"><span class="toc-number">4.</span> <span class="toc-text">The algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Putting-it-all-together"><span class="toc-number">5.</span> <span class="toc-text">Putting it all together</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&text=Game of Life" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&is_video=false&description=Game of Life" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Game of Life&body=Check out this article: http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&title=Game of Life" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://m4ktub.ws/posts/2014/08/12/game-of-life-experiment/&name=Game of Life&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Cláudio Gil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

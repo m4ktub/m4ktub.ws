@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="While experimenting and reading about the recently announced Pony Programming  Language I started thinking about the problems the current kind of  applications are facing. Scalability is a major topic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Many Ponies Can Act Together">
+<meta property="og:url" content="http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/index.html">
+<meta property="og:site_name" content="m4ktub">
+<meta property="og:description" content="While experimenting and reading about the recently announced Pony Programming  Language I started thinking about the problems the current kind of  applications are facing. Scalability is a major topic">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/sstrats.png">
+<meta property="article:published_time" content="2016-01-29T00:00:00.000Z">
+<meta property="article:modified_time" content="2016-02-04T00:00:00.000Z">
+<meta property="article:author" content="Cláudio Gil">
+<meta property="article:tag" content="actor-model">
+<meta property="article:tag" content="ponylang">
+<meta property="article:tag" content="concurrency">
+<meta property="article:tag" content="scalability">
+<meta property="article:tag" content="micro-services">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/sstrats.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=16">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=192" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/fc84e72c571a668dd413a18f92edecd7?s=180">
+          
+        
+    
+    <!-- title -->
+    <title>Many Ponies Can Act Together</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="m4ktub" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/posts/2016/02/09/pony-failure-not-an-option/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/posts/2015/12/09/spell-checkers-for-hate/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&text=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&is_video=false&description=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Many Ponies Can Act Together&body=Check out this article: http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&name=Many Ponies Can Act Together&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Infrastructure"><span class="toc-number">1.</span> <span class="toc-text">Infrastructure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scalable-web-applications"><span class="toc-number">2.</span> <span class="toc-text">Scalable web applications</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Micro-Services"><span class="toc-number">3.</span> <span class="toc-text">Micro Services</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Good-Enough"><span class="toc-number">4.</span> <span class="toc-text">Good Enough</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actors"><span class="toc-number">5.</span> <span class="toc-text">Actors</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Many Ponies Can Act Together
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">m4ktub</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2016-01-29T00:00:00.000Z" itemprop="datePublished">2016-01-29</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/ideas/">ideas</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/actor-model/" rel="tag">actor-model</a>, <a class="tag-link" href="/tags/concurrency/" rel="tag">concurrency</a>, <a class="tag-link" href="/tags/micro-services/" rel="tag">micro-services</a>, <a class="tag-link" href="/tags/ponylang/" rel="tag">ponylang</a>, <a class="tag-link" href="/tags/scalability/" rel="tag">scalability</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>While experimenting and reading about the recently announced <a href="http://www.ponylang.org/" target="_blank" rel="noopener">Pony Programming 
+Language</a> I started thinking about the problems the current kind of 
+applications are facing.</p>
+<p>Scalability is a major topic of interest and discussion. All web start-ups 
+dream of being the next Google or Facebook so any web service needs to be 
+ready, for example, to support 1 user on day 1 and a million the next day. Only 
+a few services require to react to that kind of variation but any kind of 
+variation presents a challenge. Either you have have resources for the maximum 
+demand possible or you have to either act in anticipation or react quickly. </p>
+<h2 id="Infrastructure"><a href="#Infrastructure" class="headerlink" title="Infrastructure"></a>Infrastructure</h2><p>The infrastructure side of it, that is, the machines and networks needed to 
+serve the amount of users you have and the ability to scale up or down those 
+resources can be obtained as a service. The IaaS services like <a href="https://aws.amazon.com/ec2/" target="_blank" rel="noopener">AWS</a>, <a href="https://cloud.google.com/" target="_blank" rel="noopener">Google 
+Cloud</a>, or <a href="https://azure.microsoft.com/" target="_blank" rel="noopener">Azure</a> allow you, in the very minimum to react from 1 user to a 
+million in a day. Some of them even allow to dynamically scale based on a 
+schedule (prediction) or metrics (reaction).</p>
+<img src="/posts/2016/01/29/ponylang-actor-model/sstrats.png" class="" title="Scaling strategies">
+
+<p>This is great, this is all great. The infrastructure part is still evolving 
+fast but seems solved. If you don’t want to think about that part, there are 
+services you can buy and they will do the job. Nevertheless you need to be able
+to take advantage of the infrastructure.</p>
+<h2 id="Scalable-web-applications"><a href="#Scalable-web-applications" class="headerlink" title="Scalable web applications"></a>Scalable web applications</h2><p>The service needs to be developed in a way that can take advantage of a dynamic
+infrastructure without being so complex that, while you can scale from 1 machine
+to several in minutes, you can’t develop a new feature without days of 
+integrations, testing, or bugs. Some recent advancements - or trends - have 
+changed how web applications are developed and led to some of the manageable 
+scalability that was truly needed.</p>
+<p>The popularization of <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank" rel="noopener">REST</a> allowed the recognition of the layered nature of 
+the web and the constraints needed for scalable web applications. With REST, 
+the idea that an application is essentially broken in two, and that an explicit 
+API is needed between the client and the server, allowed a proliferation of 
+reusable JSON services. The trend is still going and peeking with <a href="https://en.wikipedia.org/wiki/Single-page_application" target="_blank" rel="noopener">single-page 
+applications (SPA)</a>.</p>
+<p>The server provides a stateless API which allows to break the service in multiple
+components or, for scale, add more servers to share the load. The client keeps
+the entire application state and only communicates with HTTP requests to the 
+server. It’s evident this scales and, from the point of view of the web 
+developer, it scales perfectly as the load is beared by the client. If you jump
+from 1 to 1 million users then your client layer has scaled to 1 million hosts.
+This does not count getting the resources for the application but that’s also 
+part of the API which you can scale and optimize with cache.</p>
+<p>It’s a little more complex to develop and maintain. You have to to use a lot of
+simple patterns the communication between server and client. But simple patterns
+and a explicit interface still keep things predictable and manageable.</p>
+<h2 id="Micro-Services"><a href="#Micro-Services" class="headerlink" title="Micro Services"></a>Micro Services</h2><p>More recently that scalability was expanded with <a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="noopener">Micro Services</a>. It defends the
+same style of decoupling but now between several pieces of the server. It also
+addresses the ability to replace a particular function of the system without 
+affecting the rest (continuously deliver small improvements). Nevertheless, once
+you decouple components with a clear REST interface you have micro scalability.
+You can scale only some functional components and not everything together.</p>
+<p>Life was great if not for the burden of keeping it all up. Yes, you can quickly 
+fix and roll out the problem with the “moderation service” without affecting 
+any of the other, in the application. But you have to be able to manage it all. 
+It requires good design and organization because if you miss it, then all those 
+APIs that where there to allow quick and independent change and to permit 
+scaling out the component, turn against you.</p>
+<h2 id="Good-Enough"><a href="#Good-Enough" class="headerlink" title="Good Enough"></a>Good Enough</h2><p>… And it’s all communicating with HTTP request-replies. The amazing thing is 
+that it works most of the time. Sometimes the user gets created, in the store, 
+but sending the confirmation email fails? Just let the user register again and 
+reuse the account. Or let the user do a “Recover Password” to get to a known 
+state again. You would probably implement those features anyway anyway and it’s 
+easier than to make a distributed transaction.</p>
+<p>This “is good enough” strategy is a power-full strategy. It allows to just do 
+something and then, at the end, realize the problem you didn’t want to happen, 
+like losing data, is quite rare and there are simple ways to minimize it even 
+further. If you started by solving the problem, so that it never happens, you 
+could not have started at all. For example, all those <a href="https://en.wikipedia.org/wiki/Microservices" target="_blank" rel="noopener">eventually consistent</a> 
+systems optimize for availability. What is important is to be there, and not to 
+always be right. For most users, in Facebook for example, missing one post or 
+not having the true number of likes shown in a post is not life-or-death. And 
+the realization that this is acceptable by users, in many scenarios, allowed a 
+proliferation of eventually consistent solutions.</p>
+<p>Still, it would be nice to be able to be both. Be able to always respond with the right answer. </p>
+<h2 id="Actors"><a href="#Actors" class="headerlink" title="Actors"></a>Actors</h2><p>So what does the actor model brings to the table. The model exists since the 
+70s but is particularly relevant now because of the kind of architectures being 
+used. The massively parallel and distributed solutions have to deal essentially
+with massive concurrency and faults. Since the actor model is based on
+concurrency units - the actors - and asynchronous messages I would say it fits
+very well. At least the problems of distribution and concurrency do not even
+exist in the actor model. Obviously you get new problems but not the ones we
+know are though in these kind of applications.</p>
+<p>If we adopt a micro-service architecture, with all its management cost, for the
+benefits of continuous delivery. Adopting the actor model seems a safer bet. For
+example, in Pony, the aim is to allow you to write and maintain what is 
+essentially a monolithic application and have the runtime identity, distribute, 
+and scale the micro-services automatically. At least that is the expectation and
+it would be fun.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Infrastructure"><span class="toc-number">1.</span> <span class="toc-text">Infrastructure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scalable-web-applications"><span class="toc-number">2.</span> <span class="toc-text">Scalable web applications</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Micro-Services"><span class="toc-number">3.</span> <span class="toc-text">Micro Services</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Good-Enough"><span class="toc-number">4.</span> <span class="toc-text">Good Enough</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actors"><span class="toc-number">5.</span> <span class="toc-text">Actors</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&text=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&is_video=false&description=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Many Ponies Can Act Together&body=Check out this article: http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&title=Many Ponies Can Act Together" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://m4ktub.ws/posts/2016/01/29/ponylang-actor-model/&name=Many Ponies Can Act Together&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Cláudio Gil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Tag</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
