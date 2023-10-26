@@ -3,26 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "4.2.0"
+    "version": "6.3.0"
   },
   "dependencies": {
-    "hexo": "^4.2.0",
-    "hexo-deployer-sftp": "^0.4.1",
-    "hexo-generator-archive": "^1.0.0",
-    "hexo-generator-category": "^1.0.0",
-    "hexo-generator-feed": "^2.2.0",
-    "hexo-generator-index": "^1.0.0",
-    "hexo-generator-sitemap": "^2.0.0",
-    "hexo-generator-tag": "^1.0.0",
-    "hexo-renderer-ejs": "^1.0.0",
-    "hexo-renderer-marked": "^2.0.0",
-    "hexo-renderer-stylus": "^1.1.0",
-    "hexo-server": "^1.0.0",
-    "npm": "^6.14.4"
+    "hexo": "^6.3.0",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-feed": "^3.0.0",
+    "hexo-generator-index": "^3.0.0",
+    "hexo-generator-sitemap": "^3.0.1",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^6.1.1",
+    "hexo-renderer-stylus": "^3.0.0",
+    "hexo-server": "^3.0.0",
+    "npm": "^10.2.1"
   },
   "scripts": {
-    "server": "hexo server",
-    "generate": "hexo clean && hexo generate && cd public && npm i && cd ..",
-    "deploy": "npm run generate && hexo deploy --config _config.yml,_deploy.yml"
+    "server": "hexo server --draft",
+    "generate": "hexo clean && hexo generate && cd public && npm i && cd .."
   }
 }
