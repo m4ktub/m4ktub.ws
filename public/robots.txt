@@ -1,3 +1,3 @@
 User-agent: *
 
-Sitemap: http://m4ktub.ws/sitemap.xml
+Sitemap: https://m4ktub.ws/sitemap.xml
