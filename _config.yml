@@ -100,11 +100,13 @@ marked:
   # no automatic line breaks
   gfm: false
 
+syntax_highlighter: highlight.js
 highlight:
   enable: true
+  wrap: false
   line_number: true
   auto_detect: true
-  tab_replace:
+  tab_replace: ''
 
 skip_render:
   # do not process javascript files (#1194)
