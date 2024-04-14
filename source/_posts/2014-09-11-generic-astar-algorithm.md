@@ -17,9 +17,9 @@ where the generic implementation is used for -- guess what -- solving the
 typical pathfinding problem.
 
 The Wikipedia [article][wp1], about A\*, effectively says it is widely used in
-those two domains and the algorithm's history is tighly coupled with
+those two domains and the algorithm's history is tightly coupled with
 Dijkstra. But although many problems can be reduced to a graph traversal it's
-convenient to avoid that step. Let the search alghoritm deal with connecting the
+convenient to avoid that step. Let the search algorithm deal with connecting the
 nodes and keeping a graph. I don't want to map my problem if I have a way of
 answering some questions and get the path traversal for free. In the end I'm
 still reducing the problem but without converting my structure into a graph or

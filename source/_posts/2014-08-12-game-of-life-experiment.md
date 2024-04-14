@@ -946,7 +946,7 @@ function selectPattern(value) {
 }
 ```
 
-The global object `loop` is used to reach the algoritm and load the
+The global object `loop` is used to reach the algorithm and load the
 pattern. This means that the pattern is the content of an HTML element. For
 example, the Acorn pattern is defined as shown bellow. 
 
