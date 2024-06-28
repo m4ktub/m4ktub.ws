@@ -21,6 +21,6 @@
   },
   "scripts": {
     "server": "hexo server --draft",
-    "generate": "hexo clean && hexo generate && cd public && npm i && cd .."
+    "generate": "hexo clean && hexo generate"
   }
 }
