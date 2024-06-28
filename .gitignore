@@ -9,3 +9,4 @@ node_modules/
 _deploy.yml
 _multiconfig.yml
 .vscode/
+public/
